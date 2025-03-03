@@ -18,28 +18,10 @@ The basic steps for this task are as follows:
 
 What is the frequency of tornadoes that form in shark infested waters on the coastline happen to move inwards, and how common is it that these same tornadoes also have the strength to lift sharks from those waters?
 
-Here is some databases I've found that may be able to help anser this question
-```{r}
-# shark data
-library(readr)
-Biological_Data_SBK <- read_csv("Biological _Data_SBK.csv")
-View(Biological_Data_SBK)
-
-# tornado data
-library(readr)
-StormEvents_details_ftp_v1_0_d1950_c20210803 <- read_csv("StormEvents_details-ftp_v1.0_d1950_c20210803.csv")
-View(StormEvents_details_ftp_v1_0_d1950_c20210803)
-
-# coastal data
-library(sf)
-CZMP_counties_2009 <- read_sf("CZMP_counties_2009/CZMP_counties_2009.shp")
-View(CZMP_counties_2009)
-```
-
-
 
 
 - Identify data set(s) which are (1) publicly available (you don't have a budget to pay for private data) and (2) relevant to your task
+
 
     - (HW Week 6) Document your data sets in `draft-data-doc.qmd`
 
