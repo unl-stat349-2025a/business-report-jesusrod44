@@ -43,7 +43,7 @@ some missing values
 License: 
 There is no Data Access Policy or Use Constraints listed
 
-https://catalog.data.gov/dataset/shark-and-red-snapper-bottom-longline-survey?utm_source=chatgpt.com
+https://catalog.data.gov/dataset/shark-and-red-snapper-bottom-longline-survey
 ```{r}
 # NOAA 
 # given from Dr. VanderPlas 

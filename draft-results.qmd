@@ -2,3 +2,217 @@
 title: "Draft: Results"
 ---
 
+# Results
+
+**In the Gulf of Mexico and the Atlantic Ocean, tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the strength required to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'.**
+
+When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule (Figure 1). This clearly shows that tornadoes that form on water lack the power necessary to lift sharks.
+
+```{r}
+# Load neccessary libraries 
+library(ggplot2)
+library(readr)
+library(readxl)
+library(sf)
+library(dplyr)
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+# Tornado Data
+# NOAA / NCEI
+tornado_2024_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv")
+tornado_2023_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2023_c20250216.csv")
+tornado_2022_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2022_c20241121.csv")
+tornado_2021_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2021_c20240716.csv")
+tornado_2020_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2020_c20240620.csv")
+
+tornado_2020_2024_dataframe <- bind_rows(tornado_2024_dataframe, 
+                               tornado_2023_dataframe, 
+                               tornado_2022_dataframe, 
+                               tornado_2021_dataframe, 
+                               tornado_2020_dataframe)
+
+# Remove rows containing NA values
+tornado_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>% 
+  drop_na(BEGIN_LAT, BEGIN_LON, END_LON, END_LAT) %>% 
+  filter(str_detect(EVENT_TYPE, "Tornado") | str_detect(EVENT_TYPE, "Waterspout"))
+                                        
+# Filter for tornadoes that started in the Gulf of Mexico, Atlantic, or Pacific
+waterspout_dataframe <- tornado_2020_2024_clean_dataframe %>%
+  filter(EVENT_TYPE == 'Waterspout')
+```
+
+```{r}
+
+ggplot(tornado_2020_2024_clean_dataframe, aes(x = EVENT_TYPE, y = DAMAGE_PROPERTY)) + geom_col() + labs( title = "Comparing Property Damage Caused by Tornadoes and Waterspouts", x = "Event Type", y = "Cost of Damage") + theme_minimal()
+
+```
+
+Figure 1. Comparing Property Damage Caused by Tornadoes and Waterspouts : In the graph it would be better to look at the average, but here it looks at the total damage caused by both events. Waterspouts are so pathetic when compared to tornadoes.
+
+When taking a look at where waterspouts form and where the shark infested waters of America are we can refer to Figure 2. Waterspouts are very uncommon, and even if they form near these waters with sharks, they are not strong enough to carry them.
+
+```{r}
+
+# Let's first plot the coastal areas 
+
+# coastal data
+library(sf)
+coastal_dataframe <- 
+  read_sf("Datasets/Coastal Datasets/CZMP_counties_2009/CZMP_counties_2009.shp")
+
+ggplot(data = coastal_dataframe) + 
+  geom_sf(aes(geometry = geometry))
+
+# We see we have the coasts of most of the US mapped out, including Alaska and Hawaii,
+
+# Let's add a world map to see where those other coasts are from
+library(mapdata)
+library(maps)
+world <- map_data('world')
+states <- map_data('state')
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe)
+
+# Ok so from the new map we can see where exactly the coastal data is from 
+
+# Let's look at the US individually first, then Hawaii, then Alaska
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), fill = 'red', color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55))
+
+# Let's Plot some shark data
+library(readxl)
+shark_survey_dataframe <- read_excel("Datasets/Shark Datasets/NMFS BLL data Susan V.xlsx")
+library(readr)
+shark_dataframe <- read_csv("Datasets/Shark Datasets/Biological _Data_SBK.csv")
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), fill = 'red', color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
+  geom_point(aes(x = Longitude, y = Latitude), color = 'blue', fill = 'blue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`), color = 'skyblue', fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe)
+
+# Now let's see the path of tornadoes in the US
+
+######## tornado data
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                                 xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+               ) +
+  geom_point(data = waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Waterspouts and Sharks Along US Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+# Hawaii 
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Waterspouts and Sharks Along Hawaii Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+# Zoomed Gulf and Atlantic
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-100, -65), ylim = c(20, 50)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Waterspouts and Sharks Along The Gulf and Atlantic Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+
+
+
+
+```
+
+```{r}
+# California
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Waterspouts and Sharks Along California Coastline",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+```
