@@ -4,11 +4,11 @@ title: "Draft: Results"
 
 # Results
 
-**In the Gulf of Mexico and the Atlantic Ocean, tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the strength required to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'.**
+**In the Gulf of Mexico and the Atlantic Ocean, tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'.**
 
-When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule (Figure 1). This clearly shows that tornadoes that form on water lack the power necessary to lift sharks.
+When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule (Figure 1). This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor F Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes. 
 
-```{r}
+```{r, ,eval=FALSE,results='hide'}
 # Load neccessary libraries 
 library(ggplot2)
 library(readr)
@@ -17,49 +17,68 @@ library(sf)
 library(dplyr)
 library(tidyverse)
 library(stringr)
+library(mapdata)
+library(maps)
 ```
 
 ```{r}
 # Tornado Data
 # NOAA / NCEI
-tornado_2024_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv")
-tornado_2023_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2023_c20250216.csv")
-tornado_2022_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2022_c20241121.csv")
-tornado_2021_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2021_c20240716.csv")
-tornado_2020_dataframe <- read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2020_c20240620.csv")
+tornado_2020_2024_dataframe <- bind_rows(
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv"),
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2023_c20250216.csv"), 
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2022_c20241121.csv"), 
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2021_c20240716.csv"), 
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2020_c20240620.csv"))
 
-tornado_2020_2024_dataframe <- bind_rows(tornado_2024_dataframe, 
-                               tornado_2023_dataframe, 
-                               tornado_2022_dataframe, 
-                               tornado_2021_dataframe, 
-                               tornado_2020_dataframe)
-
-# Remove rows containing NA values
+# Remove rows containing NA values and Keep the two events we are interested in
 tornado_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>% 
   drop_na(BEGIN_LAT, BEGIN_LON, END_LON, END_LAT) %>% 
   filter(str_detect(EVENT_TYPE, "Tornado") | str_detect(EVENT_TYPE, "Waterspout"))
                                         
-# Filter for tornadoes that started in the Gulf of Mexico, Atlantic, or Pacific
+# Filter for Waterspouts
 waterspout_dataframe <- tornado_2020_2024_clean_dataframe %>%
   filter(EVENT_TYPE == 'Waterspout')
+
+# Filter for tornadic waterspouts
+tornadic_waterspout_dataframe <- waterspout_dataframe %>%
+  filter(str_detect(EVENT_NARRATIVE, 'tornad') | str_detect(EVENT_NARRATIVE, 'Tornad'))
+
+
 ```
 
 ```{r}
+# Average Property Damage Caused by Tornadoes vs Waterspouts
 
-ggplot(tornado_2020_2024_clean_dataframe, aes(x = EVENT_TYPE, y = DAMAGE_PROPERTY)) + geom_col() + labs( title = "Comparing Property Damage Caused by Tornadoes and Waterspouts", x = "Event Type", y = "Cost of Damage") + theme_minimal()
+str(tornado_2020_2024_clean_dataframe)
+
+tornado_2020_2024_clean_dataframe <- tornado_2020_2024_clean_dataframe %>%
+  mutate(DAMAGE_PROPERTY = case_when(
+    str_detect(DAMAGE_PROPERTY, "K$") ~ as.numeric(str_remove(DAMAGE_PROPERTY, "K")) * 1000,
+    str_detect(DAMAGE_PROPERTY, "M$") ~ as.numeric(str_remove(DAMAGE_PROPERTY, "M")) * 1000000,
+    DAMAGE_PROPERTY == "0.0K" ~ 0, 
+    TRUE ~ as.numeric(DAMAGE_PROPERTY)  
+  )) 
+
+property_damage_summary <- tornado_2020_2024_clean_dataframe %>%
+  group_by(EVENT_TYPE) %>%
+  summarize(Average_Property_Damage = mean(DAMAGE_PROPERTY, na.rm = TRUE))
+
+ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + labs( title = "Average Property Damage Caused by Tornadoes and Waterspouts 2020-2024", x = "Event Type", y = "Cost of Damage ($)") + theme_minimal()
 
 ```
 
-Figure 1. Comparing Property Damage Caused by Tornadoes and Waterspouts : In the graph it would be better to look at the average, but here it looks at the total damage caused by both events. Waterspouts are so pathetic when compared to tornadoes.
+Figure 1. Average Property Damage Caused by Tornadoes and Waterspouts : Waterspouts are so pathetic when compared to tornadoes. Their damage is not even visible in the graph. Their average in property damage is a measly $7.96, it cannot compare to tornadoes. 
 
-When taking a look at where waterspouts form and where the shark infested waters of America are we can refer to Figure 2. Waterspouts are very uncommon, and even if they form near these waters with sharks, they are not strong enough to carry them.
+**Waterspouts or Tornadoes that pass through shark-infested waters *and* back towards cities are not that common**
+
+When taking a look at where waterspouts form and where the shark infested waters of America are we can refer to Figure 2. Waterspouts are very uncommon, and even if they form near these waters with sharks, our findings support they have zero potential for a *Sharknado*. Our coastal cities (highlighted in red), show how near they are to shark infested waters and waterspouts. 
 
 ```{r}
 
 # Let's first plot the coastal areas 
 
 # coastal data
-library(sf)
 coastal_dataframe <- 
   read_sf("Datasets/Coastal Datasets/CZMP_counties_2009/CZMP_counties_2009.shp")
 
@@ -69,8 +88,6 @@ ggplot(data = coastal_dataframe) +
 # We see we have the coasts of most of the US mapped out, including Alaska and Hawaii,
 
 # Let's add a world map to see where those other coasts are from
-library(mapdata)
-library(maps)
 world <- map_data('world')
 states <- map_data('state')
 
@@ -96,9 +113,7 @@ ggplot(world) +
   coord_sf(xlim = c(-130, -60), ylim = c(20, 55))
 
 # Let's Plot some shark data
-library(readxl)
 shark_survey_dataframe <- read_excel("Datasets/Shark Datasets/NMFS BLL data Susan V.xlsx")
-library(readr)
 shark_dataframe <- read_csv("Datasets/Shark Datasets/Biological _Data_SBK.csv")
 
 ggplot(world) +
@@ -216,3 +231,5 @@ ggplot(world) +
        y = "Latitude", 
        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
 ```
+
+:::

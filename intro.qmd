@@ -1,5 +1,45 @@
 # Introduction
 
+## Big Picture
+
+### Who is my audience
+
+#### Boss who is scared of a sharknado could occur in real life
+
+##### Talk about what Tornadoes that form over water are called
+
+##### Discuss the differences between Tornadoes and Waterspouts
+
+###### Explain why these differences matter
+
+###### IRL a sharknado would be classified as a Waterspout that transitions into a tornado when it moves over land
+
+####### A waterspout would then be classified as a tornado
+
+##### Discuss basic information about the shark population around coastal areas
+
+## Establish a niche
+
+### Problem : Can we predict if a sharknado will ever be possibe to occur IRL using exisiting data about sharks and tornadoes
+
+### Gap in Knowledge
+
+#### Waterspouts are not classified as tornadoes, so many do not have a Tor F Scale to judge how powerful they are
+
+#### Using shark data that is from a different time period of our Tornado Data??
+
+## Occupy a Niche
+
+### How does the work approach the niche that's been identified
+
+### What approaches are being used
+
+#### Not detailed methods, but past literature on how those methods were established may be useful
+
+### How does the answer solve the open problem
+
+## State central question/approach OR Summary of results
+
 This is a book created from markdown and executable code.
 
 See @knuth84 for additional discussion of literate programming.
