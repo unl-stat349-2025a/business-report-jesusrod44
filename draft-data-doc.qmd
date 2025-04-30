@@ -83,6 +83,84 @@ License:
 No specific license is provided
 
 
+https://data.ca.gov/dataset/shark-incident-database-california
+```{r}
+# California Department of Fish and Wildlife
+library(readxl)
+shark_incidents_california <- read_excel(
+  "Datasets/Shark Datasets/SharkIncidents_1950_2022_220302.xlsx")
+
+```
+
+Who collected the Data: 
+The California Department of Fish and Wildlife
+
+Why was the data collected:
+Data are added whenever a shark incident occurs, this can be more or less frequent
+
+What the data is about:
+It includes details such as information on the date, time, location, water depth, human activity, injury (if any), species of shark, and source information.
+
+When the data was collected:
+The data was collected from 1950 to 2022
+
+Where the data was collected: 
+The data was collected on the coasts of California
+
+How was the data generated:
+The data is generated whenever a shark incident occurs, this can be more or less frequent
+
+Structure of the Data: excel file
+
+Formating desicions in the data:
+Date is formatted : YYYY-MM-DD 
+Time is formatted : 0.__ hrs
+Species name is listed as its common name, there are two blue sharks, one blue and one blue*
+
+Data Validation / Quality Control: 
+This is from a government site so it will hopefully be of good quality
+
+License: 
+No specific license is provided
+There are no restrictions on public use
+
+https://geo.pacioos.hawaii.edu/geoserver/web/npmv1UZSWswBsFRdH0hAuV6DPDdMGJhqufNuSr_FyK6pxar_keu6ePNLUZl5z61U7vLlwYzFYdhE0ElMNsAbjzexXAoBTRusRTKeqfkmSwA/npm5a/r_F98
+```{r}
+library(sf)
+shark_hawaii <- st_read("Datasets/Shark Datasets/PACIOOS_WMS_ONLY-hi_pacioos_all_shark_tiger.kml")
+```
+
+Who collected the Data: 
+The Pacific Islands Ocean Observing System
+
+Why was the data collected:
+Data was collected in order to track Behavioral and Oceanographic Data of tiger sharks
+
+What the data is about:
+The movements of tiger sharks 
+
+When the data was collected:
+The data was collected from 2016 to the present
+
+Where the data was collected: 
+The data was collected on the ocean coasts of Hawaii
+
+How was the data generated:
+The data is generated when a tiger shark is tagged by the data collectors
+
+Structure of the Data: KML file
+
+Formating desicions in the data:
+Spatial KML Data, any desciption of an observation is in a spatial column that is hard to read
+
+There is only one species recorded and that is tiger sharks 
+
+Data Validation / Quality Control: 
+This is from an educational site so it will hopefully be of good quality
+
+License: 
+No specific license is provided
+
 These datasets contain tornado information such as latitude, longtitude, magnitude, and category : https://www.ncdc.noaa.gov/stormevents/
 ```{r}
 ######## tornado data

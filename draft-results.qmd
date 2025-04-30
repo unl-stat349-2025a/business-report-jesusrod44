@@ -6,9 +6,9 @@ title: "Draft: Results"
 
 **In the Gulf of Mexico and the Atlantic Ocean, tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'.**
 
-When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule (Figure 1). This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor F Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes. 
+When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule (Figure 1). This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor F Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes.
 
-```{r, ,eval=FALSE,results='hide'}
+```{r,results='hide'}
 # Load neccessary libraries 
 library(ggplot2)
 library(readr)
@@ -24,7 +24,7 @@ library(maps)
 ```{r}
 # Tornado Data
 # NOAA / NCEI
-tornado_2020_2024_dataframe <- bind_rows(
+tornado_2020_2024_dataframe <- dplyr::bind_rows(
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv"),
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2023_c20250216.csv"), 
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2022_c20241121.csv"), 
@@ -68,11 +68,11 @@ ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)
 
 ```
 
-Figure 1. Average Property Damage Caused by Tornadoes and Waterspouts : Waterspouts are so pathetic when compared to tornadoes. Their damage is not even visible in the graph. Their average in property damage is a measly $7.96, it cannot compare to tornadoes. 
+Figure 1. Average Property Damage Caused by Tornadoes and Waterspouts : Waterspouts are so pathetic when compared to tornadoes. Their damage is not even visible in the graph. Their average in property damage is a measly \$7.96, it cannot compare to tornadoes.
 
 **Waterspouts or Tornadoes that pass through shark-infested waters *and* back towards cities are not that common**
 
-When taking a look at where waterspouts form and where the shark infested waters of America are we can refer to Figure 2. Waterspouts are very uncommon, and even if they form near these waters with sharks, our findings support they have zero potential for a *Sharknado*. Our coastal cities (highlighted in red), show how near they are to shark infested waters and waterspouts. 
+When taking a look at where waterspouts form and where the shark infested waters of America are we can refer to Figure 2. Waterspouts are very uncommon, and even if they form near these waters with sharks, our findings support they have zero potential for a *Sharknado*. Our coastal cities (highlighted in red), show how near they are to shark infested waters and waterspouts.
 
 ```{r}
 
@@ -232,4 +232,70 @@ ggplot(world) +
        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
 ```
 
-:::
+```{r}
+# Zoomed Gulf and Atlantic
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-100, -65), ylim = c(20, 50)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Waterspouts and Sharks Along The Gulf and Atlantic Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+
+```
+
+| Scientific Name            | Common Name            | Max Weight (lbs) |
+|----------------------------|------------------------|-----------------:|
+| ALOPIAS_SUPERCILIOSUS      | Bigeye Thresher        |            800.3 |
+| ALOPIAS_VULPINUS           | Common Thresher        |           1102.3 |
+| CARCHARHINUS_ACRONOTUS     | Blacknose              |             39.7 |
+| CARCHARHINUS_ALTIMUS       | Bignose                |            370.4 |
+| CARCHARHINUS_BREVIPINNA    | Spinner                |            198.4 |
+| CARCHARHINUS_FALCIFORMIS   | Silky                  |            762.8 |
+| CARCHARHINUS_ISODON        | Finetooth              |             30.0 |
+| CARCHARHINUS_LEUCAS        | Bull                   |            507.1 |
+| CARCHARHINUS_LIMBATUS      | Blacktip               |            269.0 |
+| CARCHARHINUS_OBSCURUS      | Dusky                  |            762.8 |
+| CARCHARHINUS_PEREZII       | Caribbean Reef         |            154.3 |
+| CARCHARHINUS_PLUMBEUS      | Sandbar                |            257.9 |
+| CARCHARHINUS_POROSUS       | Smalltail              |             19.8 |
+| CARCHARHINUS_SIGNATUS      | Night                  |             39.7 |
+| CENTROPHORUS_GRANULOSUS    | Gulper                 |             24.3 |
+| CENTROPHORUS_UYATO         | Little Gulper          |              6.6 |
+| CIRRHIGALEUS_ASPER         | Roughskin Spurdog      |             33.1 |
+| GALEOCERDO_CUVIER          | Tiger                  |           1984.2 |
+| GINGLYMOSTOMA_CIRRATUM     | Nurse                  |            242.5 |
+| HEPTRANCHIAS_PERLO         | Sharpnose Sevengill    |             44.1 |
+| HEXANCHUS_GRISEUS          | Bluntnose Sixgill      |           2425.1 |
+| HEXANCHUS_NAKAMURAI        | Bigeye Sixgill         |            352.7 |
+| MUSTELUS_CANIS             | Dusky Smooth-hound     |             26.5 |
+| MUSTELUS_NORRISI           | Narrowfin Smooth-hound |             15.4 |
+| MUSTELUS_SINUSMEXICANUS    | Gulf Smooth-hound      |             22.0 |
+| NEGAPRION_BREVIROSTRIS     | Lemon                  |            403.4 |
+| RHIZOPRIONODON_TERRAENOVAE | Atlantic Sharpnose     |              9.9 |
+| SCYLIORHINUS_RETIFER       | Chain Catshark         |              3.3 |
+| SPHYRNA_LEWINI             | Scalloped Hammerhead   |            334.1 |
+| SPHYRNA_MOKARRAN           | Great Hammerhead       |            992.1 |
+| SPHYRNA_TIBURO             | Bonnethead             |             22.0 |
+| SQUALUS_ACANTHIAS          | Spiny Dogfish          |             19.8 |
+| SQUALUS_CUBENSIS           | Cuban Dogfish          |             15.4 |
+| SQUALUS_MITSUKURII         | Shortspine Spurdog     |             17.6 |
+| SQUATINA_DUMERIL           | Atlantic Angel Shark   |             77.2 |
+
+: Names and Weights of Sharks in Our Dataset {.striped .hover}

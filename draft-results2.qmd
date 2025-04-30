@@ -1,0 +1,686 @@
+---
+title: "Draft: Results2"
+---
+
+# Results
+
+**Tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'.**
+
+When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule. This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor EF Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes.
+
+```{r, echo=FALSE, output=FALSE}
+#| label: Load neccessary libraries 
+library(ggplot2)
+library(readr)
+library(readxl)
+library(sf)
+library(dplyr)
+library(tidyverse)
+library(stringr)
+library(mapdata)
+library(maps)
+library(knitr)
+library(patchwork)
+```
+
+```{r, echo = FALSE,output = FALSE}
+#| label: Load Tornado Data from NOAA
+tornado_2020_2024_dataframe <- bind_rows(
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv"),
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2023_c20250216.csv"), 
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2022_c20241121.csv"), 
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2021_c20240716.csv"), 
+  read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2020_c20240620.csv"))
+```
+
+```{r, echo = FALSE, output = FALSE}
+#| label: Cleaning Tornado Data
+# Remove rows containing NA values and Keep the two events we are interested in
+tornado_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>% 
+  drop_na(BEGIN_LAT, BEGIN_LON, END_LON, END_LAT) %>% 
+  filter(str_detect(EVENT_TYPE, "Tornado") | str_detect(EVENT_TYPE, "Waterspout"))
+                                        
+# Filter for Waterspouts
+waterspout_dataframe <- tornado_2020_2024_clean_dataframe %>%
+  filter(EVENT_TYPE == 'Waterspout')
+
+# Filter for tornadic waterspouts
+tornadic_waterspout_dataframe <- waterspout_dataframe %>%
+  filter(str_detect(EVENT_NARRATIVE, 'tornad') | str_detect(EVENT_NARRATIVE, 'Tornad'))
+
+# tornadoes only 
+tornado_only_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>% 
+  drop_na(BEGIN_LAT, BEGIN_LON, END_LON, END_LAT) %>% 
+  filter(EVENT_TYPE == 'Tornado') %>% 
+  filter(TOR_F_SCALE %in% c('EF1', 'EF2', 'EF3', 'EF4', 'EF5'))
+
+
+```
+
+```{r, echo = FALSE, output = FALSE}
+#| label: Data Wrangling to get Average Property Damage Chart
+str(tornado_2020_2024_clean_dataframe)
+
+tornado_2020_2024_clean_dataframe <- tornado_2020_2024_clean_dataframe %>%
+  mutate(DAMAGE_PROPERTY = case_when(
+    str_detect(DAMAGE_PROPERTY, "K$") ~ as.numeric(str_remove(DAMAGE_PROPERTY, "K")) * 1000,
+    str_detect(DAMAGE_PROPERTY, "M$") ~ as.numeric(str_remove(DAMAGE_PROPERTY, "M")) * 1000000,
+    DAMAGE_PROPERTY == "0.0K" ~ 0, 
+    TRUE ~ as.numeric(DAMAGE_PROPERTY)  
+  )) 
+
+property_damage_summary <- tornado_2020_2024_clean_dataframe %>%
+  group_by(EVENT_TYPE) %>%
+  summarize(Average_Property_Damage = mean(DAMAGE_PROPERTY, na.rm = TRUE))
+
+```
+
+```{r}
+#| label: Average Property Damage Caused by Tornadoes vs Waterspouts Chart
+
+ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + labs( title = "Average Property Damage by Tornadoes and Waterspouts 2020-2024", x = "Event Type", y = "Cost of Damage ($)", tag= "Figure 1", caption = 'Waterspouts are very weak when compared to tornadoes. Their average in property damage is a $7.96.') + theme_minimal()
+
+```
+
+**Tornadoes that are strong enough to carry the weight of sharks do not typically form near the coasts.**
+
+```{r, echo = FALSE, output = FALSE, echo = FALSE}
+#| label: Loading In Coastal Data
+# coastal data
+coastal_dataframe <- 
+  read_sf("Datasets/Coastal Datasets/CZMP_counties_2009/CZMP_counties_2009.shp")
+
+```
+
+```{r, echo = FALSE, output = FALSE}
+#| label: Getting the map to work
+# Let's add a world map to see where those other coasts are from
+world <- map_data('world')
+states <- map_data('state')
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe)
+```
+
+```{r, echo = FALSE, output = FALSE}
+#| label: Getting a US Map
+# Let's look at the US individually first, then Hawaii, then Alaska
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), fill = 'red', color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55))
+
+```
+
+```{r, echo=FALSE, warning=FALSE, output = FALSE}
+#| label: Loading in Shark Data
+shark_survey_dataframe <- read_excel("Datasets/Shark Datasets/NMFS BLL data Susan V.xlsx")
+shark_dataframe <- read_csv("Datasets/Shark Datasets/Biological _Data_SBK.csv")
+shark_incidents_california <- read_excel(
+  "Datasets/Shark Datasets/SharkIncidents_1950_2022_220302.xlsx")
+shark_hawaii <- st_read("Datasets/Shark Datasets/PACIOOS_WMS_ONLY-hi_pacioos_all_shark_tiger.kml")
+
+```
+
+```{r, echo = FALSE, output = FALSE}
+#| label: Shark Dataset Cleaning 
+shark_incidents_california <- shark_incidents_california %>% 
+  filter(!is.na(Latitude))
+shark_incidents_california$Longitude <- as.numeric(shark_incidents_california$Longitude)
+str(shark_incidents_california)
+```
+
+```{r, echo= FALSE, output = FALSE}
+#| label: Names of Sharks in our Datasets
+
+unique(shark_incidents_california$Species)
+
+# Create the lookup table (without Blue*)
+shark_table_california <- tribble(
+  ~ScientificName, ~CommonName, ~MaxWeight,
+  "PRIONACE_GLAUCA", "Blue", 400,
+  "SPHYRNA_MOKARRAN", "Hammerhead", 992,
+  "ORCINUS_ORCA", "Killer Whale", 8800,
+  "TRIAKIS_SEMIFASCIATA", "Leopard", 70,
+  "LAMNA_DITROPIS", "Salmon", 992,
+  "NOTORYNCHUS_CEPEDIANUS", "Sevengill", 1100,
+  "ALOPIAS_VULPINUS", "Thresher", 1102,
+  "UNKNOWN", "Unknown", NA,
+  "CARCHARODON_CARCHARIAS", "White", 5000
+)
+
+# Display the table nicely
+kable(shark_table_california,
+      col.names = c("Scientific Name", "Common Name", "Max Weight (lbs)"),
+      align = c("l", "l", "r"),
+      caption = "Estimated Names and Weights of Sharks in California Dataset")
+
+# create the lookup table 
+shark_table_gulf_atlantic <- tribble(
+  ~ScientificName, ~CommonName, ~MaxWeight,
+" ALOPIAS_VULPINUS", "Common Thresher        ",           1102.3, 
+" CARCHARHINUS_ACRONOTUS", "Blacknose              ",             39.7 ,
+" CARCHARHINUS_ALTIMUS", "Bignose                ",            370.4 ,
+" CARCHARHINUS_BREVIPINNA", "Spinner                ",            198.4 ,
+" CARCHARHINUS_FALCIFORMIS", "Silky                  ",            762.8, 
+" CARCHARHINUS_ISODON", "Finetooth              ",             30.0 ,
+" CARCHARHINUS_LEUCAS", "Bull                   ",            507.1 ,
+" CARCHARHINUS_LIMBATUS", "Blacktip               ",            269.0, 
+" CARCHARHINUS_OBSCURUS", "Dusky                  ",            762.8 ,
+" CARCHARHINUS_PEREZII", "Caribbean Reef         ",            154.3 ,
+" CARCHARHINUS_PLUMBEUS", "Sandbar                ",            257.9 ,
+" CARCHARHINUS_POROSUS", "Smalltail              ",             19.8 ,
+" CARCHARHINUS_SIGNATUS", "Night                  ",             39.7 ,
+" CENTROPHORUS_GRANULOSUS", "Gulper                 ",             24.3, 
+" CENTROPHORUS_UYATO", "Little Gulper          ",              6.6 ,
+" CIRRHIGALEUS_ASPER", "Roughskin Spurdog      ",             33.1 ,
+" GALEOCERDO_CUVIER", "Tiger                  ",           1984.2 ,
+" GINGLYMOSTOMA_CIRRATUM", "Nurse                  ",            242.5, 
+" HEPTRANCHIAS_PERLO", "Sharpnose Sevengill    ",             44.1 ,
+" HEXANCHUS_GRISEUS", "Bluntnose Sixgill      ",           2425.1 ,
+" HEXANCHUS_NAKAMURAI", "Bigeye Sixgill         ",            352.7, 
+" MUSTELUS_CANIS", "Dusky Smooth-hound     ",             26.5 ,
+" MUSTELUS_NORRISI", "Narrowfin Smooth-hound ",             15.4, 
+" MUSTELUS_SINUSMEXICANUS", "Gulf Smooth-hound      ",             22.0, 
+" NEGAPRION_BREVIROSTRIS", "Lemon                  ",            403.4 ,
+" RHIZOPRIONODON_TERRAENOVAE", "Atlantic Sharpnose     ",              9.9, 
+" SCYLIORHINUS_RETIFER", "Chain Catshark         ",              3.3 ,
+" SPHYRNA_LEWINI", "Scalloped Hammerhead   ",            334.1 ,
+" SPHYRNA_MOKARRAN", "Great Hammerhead       ",            992.1, 
+" SPHYRNA_TIBURO", "Bonnethead             ",             22.0 ,
+" SQUALUS_ACANTHIAS", "Spiny Dogfish          ",             19.8, 
+" SQUALUS_CUBENSIS", "Cuban Dogfish          ",             15.4 ,
+" SQUALUS_MITSUKURII", "Shortspine Spurdog     ",             17.6 ,
+" SQUATINA_DUMERIL", "Atlantic Angel Shark   ",             77.2
+)
+kable(shark_table_gulf_atlantic,
+      col.names = c("Scientific Name", "Common Name", "Max Weight (lbs)"),
+      align = c("l", "l", "r"),
+      caption = "Estimated Names and Weights of Sharks in Gulf of Mexico and Altantic Dataset")
+
+shark_table_hawaii <- tribble(
+  ~ScientificName, ~CommonName, ~MaxWeight, 
+  " GALEOCERDO_CUVIER", "Tiger                  ",           1984.2 
+)
+
+kable(shark_table_hawaii, 
+      col.names = c('Scientic Name', "Common Name", "Max Weight (lbs)"),
+      align = c("l", "l", "r"), 
+      caption = "Names and Estimated Weights of Sharks in Hawaii Shark Dataset")
+
+```
+
+```{r, echo = FALSE, warning=FALSE}
+#| label: Path of Waterspouts in the US
+
+
+# Now let's see the path of waterspouts in the US
+
+######## waterspouts data
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                                 xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+               ) +
+  geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Tornadic Waterspouts and Sharks Along US Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+# Hawaii 
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  geom_sf(aes(geometry = geometry), color = 'skyblue', alpha = 0.5, size = 0.2, data = shark_hawaii) +
+  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Tornadic Waterspouts and Tiger Sharks Along Hawaii Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+# Zoomed Gulf and Atlantic
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-100, -65), ylim = c(20, 50)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Tornadic Waterspouts and Sharks Along The Gulf and Atlantic Coastlines",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+# California
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
+               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+  ) +
+  geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+             shape = 15,  # Square shape
+             size = 0.1) +
+  labs(title = "US Tornadic Waterspouts and Sharks Along California Coastline",
+       x = "Longitude",
+       y = "Latitude", 
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+
+```
+
+```{r, echo = FALSE, warning=FALSE}
+#| label: Path of Tornadoes in the US
+
+# Now let's see the path of tornadoes in the US
+
+######## tornado data
+
+# ggplot(world) +
+#   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+#                fill = "gray", color = "black") +
+#   geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+#                fill = "gray", color = "black") +
+#   theme_bw() +  
+#   geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+#   coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
+#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+#   geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) + 
+#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+#   geom_segment(data = tornado_only_2020_2024_clean_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+#                                                  xend = END_LON, yend = END_LAT, color = "Tornado"),
+#                arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+#                ) +
+#   geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"), 
+#              shape = 15,  # Square shape
+#              size = 0.1) +
+#   labs(title = "US Tornados and Sharks Along US Coastlines",
+#        x = "Longitude",
+#        y = "Latitude", 
+#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue")) 
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-130, -60), ylim = c(22, 55)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15,  # Square shape
+             size = 0.5) +
+  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
+       x = "Longitude",
+       y = "Latitude")
+
+# Hawaii 
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group),
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group),
+               fill = "gray", color = "black") +
+  theme_bw() +
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  geom_sf(aes(geometry = geometry), color = 'skyblue', alpha = 0.5, size = 0.2, data = shark_hawaii) +
+  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"),
+             shape = 15,  # Square shape
+             size = 1) +
+  labs(title = "US Tornados and Tiger Sharks Along Hawaii Coastlines",
+       x = "Longitude",
+       y = "Latitude",
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue"))
+
+
+# Zoomed Gulf and Atlantic
+
+# ggplot(world) +
+#   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+#                fill = "gray", color = "black") +
+#   geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+#                fill = "gray", color = "black") +
+#   theme_bw() +  
+#   geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+#   coord_sf(xlim = c(-100, -65), ylim = c(20, 50)) + 
+#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+#   geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+#   geom_segment(data = tornado_only_2020_2024_clean_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+#                                                xend = END_LON, yend = END_LAT, color = "Tornado"),
+#                arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+#   ) +
+#   geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"), 
+#              shape = 15,  # Square shape
+#              size = 0.1) +
+#   labs(title = "US Tornados and Sharks Along The Gulf and Atlantic Coastlines",
+#        x = "Longitude",
+#        y = "Latitude", 
+#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue")) 
+
+# Zoomed In Gulf of Mexico Tornadoes >= EF1
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-97, -77), ylim = c(23, 33)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15,  # Square shape
+             size = 1) +
+  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
+       x = "Longitude",
+       y = "Latitude")
+
+# Atlantic Coastlines
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-82, -67), ylim = c(25, 52)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15,  # Square shape
+             size = 1) +
+  labs(title = "US Tornadoes and Sharks Along The Atlantic Coastlines",
+       x = "Longitude",
+       y = "Latitude")
+
+
+# California
+# ggplot(world) +
+#   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+#                fill = "gray", color = "black") +
+#   geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+#                fill = "gray", color = "black") +
+#   theme_bw() +  
+#   geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+#   coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50)) + 
+#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+#   geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+#   geom_segment(data = tornado_only_2020_2024_clean_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+#                                                xend = END_LON, yend = END_LAT, color = "Tornado"),
+#                arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
+#   ) +
+#   geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"), 
+#              shape = 15,
+#              size = 0.1) +
+#   labs(title = "US Tornados and Sharks Along California Coastline",
+#        x = "Longitude",
+#        y = "Latitude", 
+#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue"))
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+    geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15,
+             size = 1) +
+  labs(title = "US Tornadoes and Sharks Along The West Coast",
+       x = "Longitude",
+       y = "Latitude")
+
+```
+
+```{r, echo = FALSE}
+#| label: joining lat and long tornado points to sf coastal data
+
+tornado_points_sf <- st_as_sf(tornado_only_2020_2024_clean_dataframe, coords = c("BEGIN_LON", "BEGIN_LAT"), crs = 4326)
+tornado_points_sf <- st_transform(tornado_points_sf, crs = st_crs(coastal_dataframe))
+
+# keeping only points that are inside of the spatial coastal data
+coastal_tornado_points <- tornado_points_sf %>%
+  st_join(coastal_dataframe, join = st_within, left = FALSE)
+
+observed_proportion_of_EF4 <- sum(coastal_tornado_points$TOR_F_SCALE == "EF4", na.rm = TRUE)/nrow(coastal_tornado_points)
+cat("Observed Proportion of EF4 tornadoes:", round(observed_proportion_of_EF4, 4), "\n")
+cat("Observed Percentage of EF4 tornadoes:", round(observed_proportion_of_EF4 * 100, 2), "%\n")
+
+
+
+```
+
+**Under the assumption that if an EF4 or EF5 tornado forms near the coast, they will become sharknados, the likelihood that would happen is very low**
+
+```{r, echo = FALSE, warning=FALSE}
+#| label: Checking only coastal tornadoes
+
+# Now let's see the path of only coastal tornadoes in the US
+# (tornadoes near the coasts)
+
+######## tornado data
+
+us_map_coastal <- ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
+  coord_sf(xlim = c(-130, -60), ylim = c(22, 55)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  labs(title = "Tornadoes and Sharks Along The Coasts of the US",
+       x = "Longitude",
+       y = "Latitude")
+
+# Hawaii 
+
+hawaii_coastal <- ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group),
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group),
+               fill = "gray", color = "black") +
+  theme_bw() +
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  geom_sf(aes(geometry = geometry), color = 'skyblue', alpha = 0.5, size = 0.2, data = shark_hawaii) +
+  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"),
+             shape = 15,  # Square shape
+             size = 1) +
+  labs(title = "US Tornados and Tiger Sharks Along Hawaii Coastlines",
+       x = "Longitude",
+       y = "Latitude",
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue"))
+
+# Zoomed In Gulf of Mexico Tornadoes >= EF1
+gulf_coastal <- ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
+  coord_sf(xlim = c(-97, -77), ylim = c(23, 33)) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
+       x = "Longitude",
+       y = "Latitude")
+
+# Atlantic Coastlines
+atlantic_coastal <- ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
+  coord_sf(xlim = c(-82, -67), ylim = c(25, 52), expand = FALSE) +
+  scale_x_continuous(breaks = seq(-82, -67, by = 3)) +
+  scale_y_continuous(breaks = seq(25, 52, by = 5)) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+  labs(title = "US Tornadoes and Sharks Along The Atlantic Coastlines",
+       x = "Longitude",
+       y = "Latitude")
+
+atlantic_coastal
+
+# California
+california_coastal <- ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  theme_bw() +  
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
+  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50),expand = FALSE) +
+  scale_x_continuous(breaks = seq(-125, -112.5, by = 3)) +
+  scale_y_continuous(breaks = seq(30, 50, by = 5)) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
+ labs(title = "US Tornadoes and Sharks Along The West Coast",
+       x = "Longitude",
+       y = "Latitude")
+
+(gulf_coastal | atlantic_coastal) / (california_coastal | hawaii_coastal)
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+#| label: Bootstrap Sampling
+
+# Store the bootstrap results
+bootstrap_proportions <- data.frame(sim=1:1000,stat=NA)
+coastal_tornado_points_bootstrap <- coastal_tornado_points
+
+set.seed(1)
+for (i in 1:1000) {
+  
+  # # Spatial join in order to keep only the toranadoes that fall on the coastal regions This slows down the rendering SIGNIFICANTLY so it is commented out just in case it is needed later
+  # coastal_tornado_points_bootstrap <- tornado_points_sf %>%
+  #   st_join(coastal_dataframe, join = st_within, left = FALSE)
+  
+  # Randomize the TOR_F_SCALE to all other tornadoes, keeps the lat and long pts the same
+  coastal_tornado_points_bootstrap$TOR_F_SCALE_shuffled <- sample(tornado_points_sf$TOR_F_SCALE, size = 473, replace = TRUE)
+  
+  # Calculate proportion of EF4s in bootstrapped sample
+  prop_ef4_bootstrap <- (sum(coastal_tornado_points_bootstrap$TOR_F_SCALE_shuffled == "EF4") + sum(coastal_tornado_points_bootstrap$TOR_F_SCALE_shuffled == "EF5")) / nrow(coastal_tornado_points_bootstrap)
+  
+  # Record the proportion of ef4 tornaodes in that sample and then repeat the process
+  bootstrap_proportions$stat[i] <- prop_ef4_bootstrap
+}
+
+boot.hist<-ggplot(bootstrap_proportions, aes(stat)) + geom_histogram(binwidth = 0.001) +
+  geom_vline(xintercept = 0.2, color = "red", linetype = "dashed") + 
+  labs(title = "Histogram of Bootstrapped Proportion of EF4 and EF5 Tornadoes",
+       x = "Observed Bootstrapped Proportion of EF4 and EF5 Tornadoes", 
+       y = "Frequency", 
+       tag = "Figure 2.",
+       caption = "The Red Dashed Line shows the probabilty of each EF scale occuring evenly, p=0.2") + 
+  theme(plot.caption.position = "plot",
+        plot.caption = element_text(hjust = 0))
+boot.hist
+ggsave("bootstrap_histogram.png", plot = boot.hist, width = 7, height = 5)
+
+
+
+# Is the probability that our observed proportion is from random chance?
+p_value_one_tailed <- mean(abs(bootstrap_proportions$stat >= abs(0.2))) ; p_value_one_tailed
+mean_boot <- mean(bootstrap_proportions$stat) ; mean_boot
+one_tailed_p <- cat("One-tailed p-value:", round(p_value_one_tailed, 4), "\n")
+
+
+
+```
+
+Given these very specific conditions: sharks are swimming close to the surface of the ocean. An EF5 tornado is the only tornado would be needed to carry sharks such as the hammerhead, tiger, and white shark. Given that there is no EF5 tornado observed in the data and EF4 tornadoes are also known to launch cars a considerable distance, we can assume that EF4 tornadoes will become sharknados when formed near the coast.
+
+Assuming each tornado is independent of each other, and there EF scales are identically distributed, meaning that the relationship between EF scale and location is random. A bootstrap sample can be done to test that the probability of an EF4 tornado forming on the coast will happen at random, meaning that there is a chance that a tornado powerful enough to carry sharks (given the right conditions) will theoretically happen at random.
+
+A null hypothesis of Ho: p = 0.20 is made. This null states that the probability of a EF4 tornado is equal to 20%, that also means all 5 categories have an equal chance of occurring. An alternative hypothesis states Ha: p \< 0.20, meaning the chance of a tornado being an EF4 tornado on the coast is less than 0.20.
+
+The observed proportion of EF4 tornadoes in our data is 0.0021 meaning, that in our observed sample, it is very unlikely for EF4 tornadoes to form near the coast. When bootstrapping, a bootstrapped observed proportion of EF4 tornadoes is `r mean_boot`. The tells us that the probability of our observation happening at random is approaching very closely to 0.
+
+We do not have enough evidence to say that these EF4 and EF5 tornadoes appear on the coasts at random, so we must reject that idea and can confirm that it is not likely that tornadoes with the potential to cause shark-infested terror will be a threat people should be worried about in the future.
