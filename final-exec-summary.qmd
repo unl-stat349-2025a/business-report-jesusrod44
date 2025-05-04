@@ -1,0 +1,14 @@
+---
+title: "Execectuive Summary"
+editor: visual
+---
+
+The Sharknado film series takes the idea of tornadoes picking up marine life to a dramatic extreme. While there has not been a documented case of a tornado hurling sharks onto land, we explored whether such an event is even scientifically plausible. We examined whether powerful tornadoes could form over or near coastal shark-infested waters, lift sharks into the air, and carry them inland.
+
+To assess the likelihood of a tornado capturing sharks within its vortex and terrorizing the public, we analyzed tornado data from 2020 to 2024 and shark population data near U.S. coastlines, particularly around the Gulf of Mexico. We defined three key conditions that are required for a Sharknado to occur: (1) a tornado must be strong enough to lift a shark, (2) it must form over or near shark-inhabited waters, and (3) it must move inland.
+
+Our findings indicate that waterspouts, tornadoes that form over water, are generally weaker than their land-based counterparts and are unlikely to lift large animals such as sharks. On the other hand, stronger tornadoes typically do not form directly over water or in close proximity to shark habitats. The two types of tornadoes with the potential to lift sharks from the water are EF4 and EF5 tornadoes given the very specific conditions that sharks are near the surface of the water. Assuming that if tornadoes form relatively near the coasts of the United States and shark-inhabited waters, the observed probability of EF4 and EF5 tornadoes forming on the coast is 0.0021. When bootstrapping under the assumption that each scale of tornado has an equal chance of happening ( Null: p = 0.2 ), we get an observed bootstrap average of 0.008.
+
+![](bootstrap_histogram.png)
+
+Therefore, while the Sharknado scenario remains a thrilling fictional concept, the probability of such an event occurring any time soon in real life is extremely low.

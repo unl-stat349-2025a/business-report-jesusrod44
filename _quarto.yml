@@ -9,8 +9,11 @@ book:
     left: "Copyright 2025, Jesus Rodriguez"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    - final-exec-summary.qmd
+    - final-intro.qmd
+    - final-methods.qmd
+    - final-results.qmd
+    - final-conclusion.qmd
     - references.qmd
   appendices:
     - draft-data-doc.qmd

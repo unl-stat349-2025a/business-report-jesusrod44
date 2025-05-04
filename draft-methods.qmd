@@ -7,25 +7,13 @@ editor: visual
 
 ## Load Neccessary Libraries
 
-```{r, output = FALSE}
-#| label: Load neccessary libraries
-library(ggplot2)
-library(readr)
-library(readxl)
-library(sf)
-library(dplyr)
-library(tidyverse)
-library(stringr)
-library(mapdata)
-library(maps)
-library(knitr)
-library(patchwork)
-```
+Throughout the statistical , many R packages were used. There were three packages used to read in data, these being the readr and readxl packages which were used to read in common data formats such as .csv and .xlsx, while the sf package was used primarily for spatial data such as .shp and .kml files. The sf package was used to perform some data wrangling on spatial data as well. Other packages for data wrangling, cleaning, and manipulaiton were the dplyr, tidyverse, and stringr. The ggplot2 package was used to help make well designed charts and maps with accompanying titles, captions, and tags. With the use of ggplot(), the maps and mapdata packages were loaded in order to create maps of the United States, the West Coast, the Gulf of Mexico and East Coast, as well as Hawaii. Lastly, the knitr and patchwork packages were utilizied to create better looking tables and charts in the quarto document.
 
 ## Tornado Data
 
-```{r, output = FALSE}
+```{r output=FALSE}
 #| label: Load Tornado Data from NOAA
+#| echo: F
 tornado_2020_2024_dataframe <- bind_rows(
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv"),
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2023_c20250216.csv"), 
@@ -36,7 +24,7 @@ tornado_2020_2024_dataframe <- bind_rows(
 
 ### Cleaning Tornado Data
 
-```{r, output = FALSE}
+```{r, , echo = F, output = FALSE}
 #| label: Cleaning Tornado Data
 # Remove rows containing NA values and Keep the two events we are interested in
 tornado_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>% 
@@ -64,7 +52,7 @@ tornado_only_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>%
 
 Tornadoes and waterspouts are classified as two different events. Both fit one of the requirements for a sharknado: The event must form over *or* near shark-inhabited waters. However, there is no easy way to measure the power scale of waterspouts. Therefore, a simplified way to check how much damage they are capable of is to look at the average cost of property each event has caused in our sample. The following data wrangling was needed in order to get a clean chart comparing the averages.
 
-```{r, echo = TRUE, output = FALSE}
+```{r, echo = F, output = FALSE}
 #| label: Data Wrangling to get Average Property Damage Chart
 str(tornado_2020_2024_clean_dataframe)
 
@@ -82,7 +70,7 @@ property_damage_summary <- tornado_2020_2024_clean_dataframe %>%
 
 ```
 
-```{r,echo = TRUE, output = FALSE}
+```{r,echo = F, output = FALSE}
 #| label: Average Property Damage Caused by Tornadoes vs Waterspouts Chart
 
 ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + labs( title = "Average Property Damage by Tornadoes and Waterspouts 2020-2024", x = "Event Type", y = "Cost of Damage ($)", tag= "Figure 1", caption = 'Waterspouts are very weak when compared to tornadoes. Their average in property damage is a $7.96.') + theme_minimal()
@@ -93,7 +81,7 @@ ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)
 
 In order to overlay what parts our coastal data define the coasts in the United States, a plot consisting of both coordinate and spatial data was made.
 
-```{r, echo = TRUE, output = FALSE}
+```{r, echo = F, output = FALSE}
 #| label: Loading In Coastal Data
 # coastal data
 coastal_dataframe <- 
@@ -101,7 +89,7 @@ coastal_dataframe <-
 
 ```
 
-```{r, echo = TRUE, output = FALSE}
+```{r, echo = F, output = FALSE}
 #| label: Getting the map to work
 # Let's add a world map to see where those other coasts are from
 world <- map_data('world')
@@ -116,7 +104,7 @@ ggplot(world) +
   geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe)
 ```
 
-```{r, echo = TRUE, output = FALSE}
+```{r, echo = F, output = FALSE}
 #| label: Getting a US Map
 # Let's look at the US individually first, then Hawaii, then Alaska
 
@@ -135,7 +123,7 @@ ggplot(world) +
 
 The shark datasets used in this report required some cleaning in order to be analyzed. In the shark data for California, observations with no latitude or longitude values recorded were removed.
 
-```{r, echo=TRUE, warning=FALSE, output = FALSE}
+```{r, echo=F, warning=FALSE, output = FALSE}
 #| label: Loading in Shark Data
 shark_survey_dataframe <- read_excel("Datasets/Shark Datasets/NMFS BLL data Susan V.xlsx")
 shark_dataframe <- read_csv("Datasets/Shark Datasets/Biological _Data_SBK.csv")
@@ -145,7 +133,7 @@ shark_hawaii <- st_read("Datasets/Shark Datasets/PACIOOS_WMS_ONLY-hi_pacioos_all
 
 ```
 
-```{r, echo = TRUE, output = FALSE}
+```{r, echo = F, output = FALSE}
 #| label: Shark Dataset Cleaning 
 shark_incidents_california <- shark_incidents_california %>% 
   filter(!is.na(Latitude))
@@ -251,7 +239,7 @@ kable(ef_scale, caption = "Table: Enhanced Fujita (EF) scale and corresponding w
 
 When plotting waterspouts, only the tornadic waterspouts were considered, as these are more related to tornadoes and cause a much bigger disruption than fair weather waterspouts. In ggplot(), geom_segment() was used to plot the beginning and end points of waterspouts, to see if they'd move inland. Although some do, it most do not move a noticeable distance away from there beginning coordinates, and if they do, they do not make landfall.
 
-```{r, echo = TRUE,output = FALSE, warning=FALSE}
+```{r, echo = F,output = FALSE, warning=FALSE}
 #| label: Path of Waterspouts in the US
 
 
@@ -362,7 +350,7 @@ ggplot(world) +
 
 When plotting tornadoes, it is a very similar process to plotting waterspouts. In this situation, we only want tornadoes as our EVENT_TYPE. In the beginning, using geom_segment() was considered when plotting tornadoes, however, this caused the map to become more bloated than it already is, so it has been commented out in the code.
 
-```{r, echo = TRUE, output = FALSE, warning=FALSE}
+```{r, echo = F, output = FALSE, warning=FALSE}
 #| label: Path of Tornadoes in the US
 
 # Now let's see the path of tornadoes in the US
@@ -543,7 +531,7 @@ In this report, a 'coastal tornado' is a tornado that falls inside the coordinat
 
 To first plot the coastal tornadoes, the tornadoes coordinate data points were joined with the coastal spatial data polygons. The tornado points were transformed into spatial data via st_transform() from the 'sf' package. Then with the st_join() from the same package, we can finally filter all the points inside the coastal regions like we want. Here, the observed proportion of EF4 and EF5 tornadoes on the coasts was also found and it will be shown in the results.
 
-```{r, echo = TRUE, output = FALSE}
+```{r, echo = F, output = FALSE}
 #| label: joining lat and long tornado points to sf coastal data
 
 tornado_points_sf <- st_as_sf(tornado_only_2020_2024_clean_dataframe, coords = c("BEGIN_LON", "BEGIN_LAT"), crs = 4326)
@@ -559,7 +547,7 @@ observed_proportion_of_EF4 <- sum(coastal_tornado_points$TOR_F_SCALE == "EF4", n
 
 Once we have a dataframe with the coastal observations wanted, the process to plot them on a map is similar to before using ggplot().
 
-```{r, echo = TRUE, output = FALSE, warning=FALSE}
+```{r, echo = F, output = FALSE, warning=FALSE}
 #| label: Checking only coastal tornadoes
 
 # Now let's see the path of only coastal tornadoes in the US
@@ -671,7 +659,7 @@ This process was very complex. We assume that the null hypothesis states that ea
 
 A histogram is made to show the distribution of the bootstrapped proportions, with a red dashed line showing the null p-value of 0.2. To see if our observed probability is based off random chance under the null, we compare the mean of all the bootstrapped proportions against the null p-value. If a p-value below 0.05 is recorded, we have enough evidence to reject the null and say EF4 and EF5 tornadoes are very unlikely to occur on the coasts of America.
 
-```{r, echo = TRUE, warning = FALSE, output = FALSE}
+```{r, echo = F, warning = FALSE, output = FALSE}
 #| label: Bootstrap Sampling
 
 # Store the bootstrap results

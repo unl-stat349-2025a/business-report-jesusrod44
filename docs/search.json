@@ -1,0 +1,424 @@
+[
+  {
+    "objectID": "final-results.html",
+    "href": "final-results.html",
+    "title": "4  Results",
+    "section": "",
+    "text": "Tornadoes that form over water (also known as “Waterspouts”) in shark-infested waters, that also move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie ‘Sharknado’.\nWhen plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing $5000 in damages. But when compared to tornadoes, this is very minuscule. This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor EF Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes.\n\nggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + labs( title = \"Average Property Damage by Tornadoes and Waterspouts 2020-2024\", x = \"Event Type\", y = \"Cost of Damage ($)\", tag= \"Figure 1\", caption = 'Waterspouts are very weak when compared to tornadoes. Their average in property damage is a $7.96.') + theme_minimal()\n\n\n\n\n\n\n\n\nTornadoes that are strong enough to carry the weight of sharks do not typically form near the coasts.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nObserved Proportion of EF4 tornadoes: 0.0021 \n\n\nObserved Percentage of EF4 tornadoes: 0.21 %\n\n\nUnder the assumption that if an EF4 or EF5 tornado forms near the coast, they will become sharknados, the likelihood that would happen is very low\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n[1] 0\n\n\n[1] 0.008071882\n\n\nOne-tailed p-value: 0 \n\n\nGiven these very specific conditions: sharks are swimming close to the surface of the ocean. An EF5 tornado is the only tornado would be needed to carry sharks such as the hammerhead, tiger, and white shark. Given that there is no EF5 tornado observed in the data and EF4 tornadoes are also known to launch cars a considerable distance, we can assume that EF4 tornadoes will become sharknados when formed near the coast.\nAssuming each tornado is independent of each other, and there EF scales are identically distributed, meaning that the relationship between EF scale and location is random. A bootstrap sample can be done to test that the probability of an EF4 tornado forming on the coast will happen at random, meaning that there is a chance that a tornado powerful enough to carry sharks (given the right conditions) will theoretically happen at random.\nA null hypothesis of Ho: p = 0.20 is made. This null states that the probability of a EF4 tornado is equal to 20%, that also means all 5 categories have an equal chance of occurring. An alternative hypothesis states Ha: p &lt; 0.20, meaning the chance of a tornado being an EF4 tornado on the coast is less than 0.20.\nThe observed proportion of EF4 tornadoes in our data is 0.0021 meaning, that in our observed sample, it is very unlikely for EF4 tornadoes to form near the coast. When bootstrapping, a bootstrapped observed proportion of EF4 tornadoes is 0.0080719. The tells us that the probability of our observation happening at random is approaching very closely to 0.\nWe do not have enough evidence to say that these EF4 and EF5 tornadoes appear on the coasts at random, so we must reject that idea and can confirm that it is not likely that tornadoes with the potential to cause shark-infested terror will be a threat people should be worried about in the future.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html",
+    "href": "final-methods.html",
+    "title": "3  Methods",
+    "section": "",
+    "text": "4 Load Neccessary Libraries\nThroughout the statistical , many R packages were used. There were three packages used to read in data, these being the readr and readxl packages which were used to read in common data formats such as .csv and .xlsx, while the sf package was used primarily for spatial data such as .shp and .kml files. The sf package was used to perform some data wrangling on spatial data as well. Other packages for data wrangling, cleaning, and manipulation were the dplyr, tidyverse, and stringr. The ggplot2 package was used to help make well designed charts and maps with accompanying titles, captions, and tags. With the use of ggplot(), the maps and mapdata packages were loaded in order to create maps of the United States, the West Coast, the Gulf of Mexico and East Coast, as well as Hawaii. Lastly, the knitr and patchwork packages were utilized to create better looking tables and charts in the quarto document.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#load-neccessary-libraries",
+    "href": "final-methods.html#load-neccessary-libraries",
+    "title": "3  Methods",
+    "section": "4.1 Load Neccessary Libraries",
+    "text": "4.1 Load Neccessary Libraries\nThroughout the statistical , many R packages were used. There were three packages used to read in data, these being the readr and readxl packages which were used to read in common data formats such as .csv and .xlsx, while the sf package was used primarily for spatial data such as .shp and .kml files. The sf package was used to perform some data wrangling on spatial data as well. Other packages for data wrangling, cleaning, and manipulation were the dplyr, tidyverse, and stringr. The ggplot2 package was used to help make well designed charts and maps with accompanying titles, captions, and tags. With the use of ggplot(), the maps and mapdata packages were loaded in order to create maps of the United States, the West Coast, the Gulf of Mexico and East Coast, as well as Hawaii. Lastly, the knitr and patchwork packages were utilized to create better looking tables and charts in the quarto document.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#shark-data",
+    "href": "final-methods.html#shark-data",
+    "title": "3  Methods",
+    "section": "4.2 Shark Data",
+    "text": "4.2 Shark Data\nFour shark datasets were used in this business report. Three come from trusted government agencies and report a survey of sharks tagged in the Gulf of Mexico, Florida, and Hawaii. The fourth one differs from the rest, being that it is data recorded on shark incidents in California.\n\n4.2.1 Cleaning Shark Data\nNot much data wrangling was needed to prepare for shark distribution plotting. However, in California’s shark incident dataset, empty longitude and latitude were removed.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#tornado-data",
+    "href": "final-methods.html#tornado-data",
+    "title": "3  Methods",
+    "section": "4.3 Tornado Data",
+    "text": "4.3 Tornado Data\nFive datasets from the past 5 years as of 2025, each containing information for a different year, were analyzed in this report. All datasets were taken from the same source, National Oceanic and Atmospheric Association (NOAA).\nThe reasoning behind only including data from the past five years is climate change and recent weather activity. Modern tornado data is more valuable to be analyzed in this report due to modern weather trends. So, even with NOAA offering data recorded starting from the year 1950, only current data was implemented to be analyzed.\n\n4.3.1 Cleaning Tornado Data\nThe storm events included in this dataset ranged from avalanches to thunderstorms. Due to interest only being in the events: Tornadoes and Waterspouts, all other unneccessary events were filtered out and removed from the data. These two events were then categorized in their own dataset.\nIn the waterspout dataset, the latter, less powerful fair weather waterspouts were removed in order to evaluate tornadic waterspouts. For this to be done, in the data’s ‘Event Narrative’ columns, where they include a brief summary on the event, only cases where the string “tornad” were selected, as this string would keep observations that discussed waterspouts that either: Were tornadic waterspouts or transformed into tornadoes.\nFor the filtered tornado dataset, observations where the EF Score of a tornado was “EFU” meaning unknown were removed in order to keep tornadoes with a properly rated EF Scale.\nIn both filtereed datasets, rows wth ‘NA’ values in thier beginning and ending latitude and longitude values were excluded.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#coastal-data",
+    "href": "final-methods.html#coastal-data",
+    "title": "3  Methods",
+    "section": "4.4 Coastal Data",
+    "text": "4.4 Coastal Data\nCoastal data for the United States was taken from the United States Geological Survey (USGS). This data set included data plotting the borders of U.S. coasts as well as U.S. territories, the latter was rejected for this report.\n\n4.4.1 Preparing Coastal Data for Plotting Maps\nIn order to overlay what parts our coastal data define the coasts in the United States, a plot consisting of both coordinate and spatial data was made.\nThe way to plot the coasts differed due to the data being spatial. The sf package was used to highlight (what the dataset considered) the coasts with a red outline. The coordinates were changed to make maps of the following regions: United States, The Southeast and Gulf of Mexico, The West Coast, and Hawaii.\nThis processed gave us the maps to be plotting shark and tornadoes with.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#comparing-waterspouts-to-tornadoes",
+    "href": "final-methods.html#comparing-waterspouts-to-tornadoes",
+    "title": "3  Methods",
+    "section": "4.5 Comparing Waterspouts to Tornadoes",
+    "text": "4.5 Comparing Waterspouts to Tornadoes\nTornadoes and waterspouts are classified as two different events. Both fit one of the requirements for a sharknado: The event must form over or near shark-inhabited waters. However, there is no simple, concrete way to measure the power scale of waterspouts. Therefore, an oversimplified way to check how much damage they are capable of is to look at the average cost of property each event has caused in our sample.\nThe following data wrangling was needed in order to get a clean chart comparing the averages. The data’s property damage column was formatted as 100K or 1M, meaning $100,000 and $1,000,000. To combat this, rows with the letters K or M in the “DAMAGE_PROPERTY” column were multiplied by 1000 and 10000000. This prepared the property damage to be averaged out and listed in a chart using ggplot() from the ggplot2 packge.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#plotting-waterspouts",
+    "href": "final-methods.html#plotting-waterspouts",
+    "title": "3  Methods",
+    "section": "4.6 Plotting Waterspouts",
+    "text": "4.6 Plotting Waterspouts\nWhen plotting waterspouts, only the tornadic waterspouts were considered, as these are more related to tornadoes and cause a much bigger disruption than fair weather waterspouts. In ggplot(), geom_segment() was used to plot the beginning and end points of waterspouts, to see if they’d move inland. Although some do, most do not move a noticeable distance away from there beginning coordinates, and if they do, they do not make landfall.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#plotting-tornadoes",
+    "href": "final-methods.html#plotting-tornadoes",
+    "title": "3  Methods",
+    "section": "4.7 Plotting Tornadoes",
+    "text": "4.7 Plotting Tornadoes\nWhen plotting tornadoes, it is a very similar process to plotting waterspouts. In this situation, we only want tornadoes as our EVENT_TYPE. In the beginning, using geom_segment() was considered when plotting tornadoes, however, this caused the map to become more bloated than it already is, so it has been commented out in the code.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#plotting-only-coastal-tornadoes",
+    "href": "final-methods.html#plotting-only-coastal-tornadoes",
+    "title": "3  Methods",
+    "section": "4.8 Plotting Only Coastal Tornadoes",
+    "text": "4.8 Plotting Only Coastal Tornadoes\nIn this report, a ‘coastal tornado’ is defined as a tornado that falls inside the coordinates of the multipolygon coastal spatial data plotted. Some implications arise from this however that will be discussed later.\nTo first plot the coastal tornadoes, the tornadoes coordinate data points were joined with the coastal spatial data polygons. The tornado points were transformed into spatial data via st_transform() from the ‘sf’ package. Then with the st_join() from the same package, we can finally filter all the points inside the coastal regions like we want. Here, the observed proportion of EF4 and EF5 tornadoes on the coasts was also found and it will be shown in the results.\nOnce a a dataframe with the coastal observations wanted is achieved, the process to plot them on a map is similar to before using ggplot().",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#bootstrap-sampling",
+    "href": "final-methods.html#bootstrap-sampling",
+    "title": "3  Methods",
+    "section": "4.9 Bootstrap Sampling",
+    "text": "4.9 Bootstrap Sampling\nThis process was very complex. We assume that the null hypothesis states that each category of tornado: EF1, EF2,…,EF5, all appear equally. This gives us a p-value of 0.2 (There are 5 values and each appear evenly). Under this assumption, 1000 bootstrap samples were taken. At first, the points were filtered out to only include coastal tornadoes, but this process made the rendering unbearably long. Therefore, it was commented out, and we assume that the 473 observations sampled each time in 1 bootstrap sample are the coastal tornadoes. This is because if each data point is having their EF scale randomized with replacement, the points will not be of importance, rather the proportion of the amount of times an EF4 or EF5 tornado appears in a bootstrap sample is more important. A problem with this is there are no EF5 tornadoes in our data, but this is discussed as well later.\nA histogram is made to show the distribution of the bootstrapped proportions, with a red dashed line showing the null p-value of 0.2. To see if our observed probability is based off random chance under the null,the mean of all the bootstrapped proportions is compared against the null p-value. If a p-value below 0.05 is recorded, we have enough evidence to reject the null and say EF4 and EF5 tornadoes are very unlikely to occur on the coasts of America.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html",
+    "href": "final-intro.html",
+    "title": "2  Introduction",
+    "section": "",
+    "text": "3 A Real Life Sharknado?\nThere is a growing concern over the possibility of a real life Sharknado, a tornado that forms over water, gathers sharks in its powerful vortex, and then travels onto land, carrying the sharks with it. These sharknados wreak havoc all throughout the United States in locations like Los Angeles, New York City, and even Washington D.C. all the way down to Orlando, Florida raining sharks down from the sky. There have been circumstances where tornadoes have picked up animals such as fish and frogs, if one’s imagination is not limited, one could see it be possible for tornadoes to carry sharks. Although this concept originates science fiction movie series, it raises serious questions on how thin the line between fiction and reality might be when it comes to such a catastrophic event.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#a-real-life-sharknado",
+    "href": "final-intro.html#a-real-life-sharknado",
+    "title": "2  Intro",
+    "section": "3.1 A Real Life Sharknado?",
+    "text": "3.1 A Real Life Sharknado?\nThere is a growing concern over the possibility of a real life Sharknado, a tornado that forms over water, gathers sharks in its powerful vortex, and then travels onto land, carrying the sharks with it. These sharknados wreak havoc all throughout the United States in locations like Los Angeles, New York City, and even Washington D.C. all the way down to Orlando, Florida raining sharks down from the sky. There have been circumstances where tornadoes have picked up animals such as fish and frogs, if one’s imagination is not limited, one could see it be possible for tornadoes to carry sharks. Although this concept originates science fiction movie series, it raises serious questions on how thin the line between fiction and reality might be when it comes to such a catastrophic event.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Intro</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#tornadoes-and-sharks",
+    "href": "final-intro.html#tornadoes-and-sharks",
+    "title": "2  Intro",
+    "section": "3.2 Tornadoes and Sharks",
+    "text": "3.2 Tornadoes and Sharks\nTo help figure out how a sharknado would be possible, the strenghts and conditions of tornadoes must be analyzed to see how they could carry these apex marine predators.\n\n3.2.1 How Strong can a Tornado Be?\nThe Enhanced Fujita Scale (EF Scale), which is used to assign a tornado a rating based on estimated wind speeds. The scores and their estimated wind speeds go as follows:",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Intro</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#enhanced-fujita-ef-scale-and-wind-speeds",
+    "href": "final-intro.html#enhanced-fujita-ef-scale-and-wind-speeds",
+    "title": "2  Intro",
+    "section": "3.3 Enhanced Fujita (EF) Scale and Wind Speeds",
+    "text": "3.3 Enhanced Fujita (EF) Scale and Wind Speeds\n\n\n\nTable: Enhanced Fujita (EF) scale and corresponding wind speeds\n\n\nEF_Rating\nWind_Speed_Range\n\n\n\n\nEF0 (Weakest)\n65 - 85 mph\n\n\nEF1\n86 - 110 mph\n\n\nEF2\n111 - 135 mph\n\n\nEF3\n136 - 165 mph\n\n\nEF4\n166 - 200 mph\n\n\nEF5 (Strongest)\nOver 200 mph\n\n\n\n\n\nMinor damage such as broken tree branches and roof shingles being blown away can be expected from EF0 tornadoes. While on the other end of the spectrum, EF5 tornadoes can promise wind speeds that can decimate well built homes and infrastructure. These tornadoes can carry objects like cars with no trouble. An EF2 tornado is where we finally see enough force for winds to pick up a small car around 2000lbs, but not enough force for it to be thrown wildly. In the center, an EF3 tornado can remove the roofs off buildings on uproot small trees. An EF4 tornado is where we finally begin to see heavy objects such as trucks, cars, and semis be thrown around considerable distances.\nAn EF5 tornado will for sure have the potential to be a sharknado, and another contender is the EF4 tornado and maybe, if the conditions are just right, an EF3 tornado might be able to, however, this is being very generous. Our sharknado would realistically have to be a category EF5 or EF4 tornado in order to cause terror similar to the film.\n\n3.3.1 Tornado or Waterspout?\nThis sharknado would need to have a tornado that forms over shark infested waters. A tornado that forms over water is usually classified as a waterspout. Waterspouts are not classified as tornadoes, so they are not given a score on the EF scale. If a waterspout moves on shore however, The National Weather Service classifies it as a tornado and issues a tornado warning for the area.\nWaterspouts are generally broken into two categories: fair weather waterspouts and tornadic waterspouts. Fair weather waterspouts to put it simply are a less dangerous event that form during relatively calm weather and are not associated with thunderstorms. The phenonema of interest are tornadic waterspouts. These have the same characteristics of a land tornado, they are often accompanied by high winds, severe thunderstorms, large hail. It is essentially a tornado that forms over water, but it can also form by a tornado moving from land to water. If a sharknado would occur this is how it would form!\n\n\n3.3.2 Sharks in Waters in the United Sates\nSharks are found in coastal waters along the East Coast, Gulf of Mexico, and the Caribbeans. These waters are where a sharknado would have to form.\nSharks vary greatly in size and weight. Some common sharks and their average adult weights include:\n\n\n\nTable: Shark species and typical weight ranges\n\n\nSpecies\nWeight_Range_lbs\n\n\n\n\nAtlantic Sharpnose\n15 - 25\n\n\nAtlantic Blacktip\n66 - 200\n\n\nTiger\n850 - 1400\n\n\nHammerhead\n500 - 1000\n\n\nSandtiger\n200 - 350\n\n\nThe Great White\n1500 - 2400\n\n\n\n\n\nThe sharks that were commonly seen inside the sharknado were the tiger shark, the hammerhead shark, and of course, the great white shark.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Intro</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#can-a-sharknado-actually-occur",
+    "href": "final-intro.html#can-a-sharknado-actually-occur",
+    "title": "2  Intro",
+    "section": "3.4 Can a Sharknado Actually Occur?",
+    "text": "3.4 Can a Sharknado Actually Occur?\nIs it possible to predict if a sharknado can happen in real life using exisiting data about sharks and tornadoes from years past?\nTo answer this burning question, a scrutinizing look at meteorological and marine data must be done.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Intro</span>"
+    ]
+  },
+  {
+    "objectID": "final-exec-summary.html",
+    "href": "final-exec-summary.html",
+    "title": "1  Execectuive Summary",
+    "section": "",
+    "text": "The Sharknado film series takes the idea of tornadoes picking up marine life to a dramatic extreme. While there has not been a documented case of a tornado hurling sharks onto land, we explored whether such an event is even scientifically plausible. We examined whether powerful tornadoes could form over or near coastal shark-infested waters, lift sharks into the air, and carry them inland.\nTo assess the likelihood of a tornado capturing sharks within its vortex and terrorizing the public, we analyzed tornado data from 2020 to 2024 and shark population data near U.S. coastlines, particularly around the Gulf of Mexico. We defined three key conditions that are required for a Sharknado to occur: (1) a tornado must be strong enough to lift a shark, (2) it must form over or near shark-inhabited waters, and (3) it must move inland.\nOur findings indicate that waterspouts, tornadoes that form over water, are generally weaker than their land-based counterparts and are unlikely to lift large animals such as sharks. On the other hand, stronger tornadoes typically do not form directly over water or in close proximity to shark habitats. The two types of tornadoes with the potential to lift sharks from the water are EF4 and EF5 tornadoes given the very specific conditions that sharks are near the surface of the water. Assuming that if tornadoes form relatively near the coasts of the United States and shark-inhabited waters, the observed probability of EF4 and EF5 tornadoes forming on the coast is 0.0021. When bootstrapping under the assumption that each scale of tornado has an equal chance of happening ( Null: p = 0.2 ), we get an observed bootstrap average of 0.008.\n\nTherefore, while the Sharknado scenario remains a thrilling fictional concept, the probability of such an event occurring any time soon in real life is extremely low.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Execectuive Summary</span>"
+    ]
+  },
+  {
+    "objectID": "final-conclusion.html",
+    "href": "final-conclusion.html",
+    "title": "5  Conclusion",
+    "section": "",
+    "text": "6 Conclusions",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "final-conclusion.html#tornadic-waterspouts-powerful-enough-to-carry-sharks-and-makes-landfall-is-an-unlikely-event",
+    "href": "final-conclusion.html#tornadic-waterspouts-powerful-enough-to-carry-sharks-and-makes-landfall-is-an-unlikely-event",
+    "title": "5  Conclusion",
+    "section": "6.1 Tornadic Waterspouts Powerful Enough to Carry Sharks And Makes Landfall is an Unlikely Event",
+    "text": "6.1 Tornadic Waterspouts Powerful Enough to Carry Sharks And Makes Landfall is an Unlikely Event\nKey findings suggest that a sharknado is not likely to occur. Waterspouts do tend to form in shark infested waters, but these are not powerful enough to lift sharks that can weight up to 2400 lbs and relocate them to land. From the more powerful of the two types of waterspouts, tornadic waterspouts’ power are limited and never seem to make landfall.\n\n6.1.1 There is a Little Amount of Tornadoes with a High Enough EF Score that form near the coasts\nTornadoes that do form near the coasts typically have an EF rating of EF2 or lower. An EF2 tornado has the power to lift a car and move it a ways from where it was, but when trying to find the possibility of lifting sharks throughout a city, a stronger EF4 tornado is very well needed to pull the sharks from the depths of the water. Although there are some EF3 tornadoes present in Florida, and EF3 tornadoes could pick up a car and throw them a considerable distance, the chance that sharks are swimming near the surface of the water to be pulled into the vortex is low. There is an EF4 tornado located in Georgia, however this tornado is not close enough to the ocean coasts that it would be able to make contact with the sharks present there.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "final-conclusion.html#real-world-interpretation",
+    "href": "final-conclusion.html#real-world-interpretation",
+    "title": "5  Conclusion",
+    "section": "6.2 Real World Interpretation",
+    "text": "6.2 Real World Interpretation\nPeople of the United States that live on the coasts can be clear of mind that a sharknado will not be one of their worries when it comes to weather events such as hurricanes and tropical storms.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "final-conclusion.html#limitations-in-data-and-knowledge",
+    "href": "final-conclusion.html#limitations-in-data-and-knowledge",
+    "title": "5  Conclusion",
+    "section": "6.3 Limitations in Data and Knowledge",
+    "text": "6.3 Limitations in Data and Knowledge\n\n6.3.1 No Free Shark Survey Dataset (From a Trusted Source) that Has Observations on the West Coast or Northeast of America\nAlthough our data showed that tornadic waterspouts and tornadoes that form near the coasts of America do not form too often and are not that powerful, there was not much comparison when plotting those events against sharks surveyed or spotted outside of the Southeast or Hawaii. Data for California was found, however that was not survey or tracking data, rather it was shark incident data. This leads to more sharks being plotted in places that have more people, preventing an evenly distribution of shark points on the map. Due to this limitation, our interpretation can only be justified that people on the coasts of the Southeast region of America near the Gulf of Mexico, Hawaii, and California.\n\n\n6.3.2 Bootstrapping\nOur probability observed from our bootstrapped sample of 0.008, only tells us that if the EF scales of the tornadoes in our dataset were randomized, and they were measured on the tornadoes near the coasts, that is the long run proportion of EF4 and EF5 tornadoes that will form near the coasts. However, the way the coastal data is set up, these tornadoes can be technically in the coastal region plotted, but be too far away from the coastline to be able to cause havoc with sharks. Our bootstrap probability is then not really the true average amount of tornadoes that would be able to lift sharks, and in reality it could be greater or it could be less.\n\n\n6.3.3 Hurricanes?\nIn this report, only tornadoes were considered. This can be a bit problematic when looking at a place like Hawaii. There are very little tornadoes recorded in Hawaii, yet a lot of sharks. It could be argued, that a hurricane of great strength could be enough to lift the numerous sharks surrounding Hawaii, but in as stated previous, we are not interested in Shark-icanes.\n\n\n6.3.4 Comparing Tornadoes and Waterspouts\nWaterspouts do not have any classification of power similar to tornadoes. In order to compare the differences in power between the two, the observed damage to property was looked at. A problem with this is that waterspouts will most likely be less damaging as they are not near much property at all when forming. This caused the averages to be compared instead, but there is still some limitations on how far the implication of just how strong waterspouts can be. It is clear though, that the greatest waterspouts, were still not able to match the power of tornadoes with a score of EF2 or higher.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "final-conclusion.html#future-directions-and-implications",
+    "href": "final-conclusion.html#future-directions-and-implications",
+    "title": "5  Conclusion",
+    "section": "6.4 Future Directions and Implications",
+    "text": "6.4 Future Directions and Implications\nIf a budget allows, using private data may be able to help know just how close these coastal tornadoes and tornadic waterspouts are to the shark population of America.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "“Storm Events Database | National Centers for Environmental\nInformation.” n.d. https://www.ncdc.noaa.gov/stormevents/.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "draft-data-doc.html",
+    "href": "draft-data-doc.html",
+    "title": "Appendix A — Draft: Data Documentation",
+    "section": "",
+    "text": "Here is some databases I’ve found that may be able to help answer this question\nhttps://www.fisheries.noaa.gov/inport/item/46426\nWho collected the data: The first dataset is from the Southeast Fisheries Science Center which is a part of NOAA Fisheries and National Ocean Services database.\nWhy was the data collected: The data was collected to investigate the foraging ecology of early life stages of blacktip sharks in Florida, to determine levels of resource overlap.\nWhat is the data about: The data is about analyzing the biological information and diet information of blacktip sharks in Florida to examine foraging ecology, bioenergetics, and trophic level.\nWhen was the data collected: The data was collected from 2008 to 2010\nWhere was the data collected: The data was collected at Crooked Island Sound and Gulf of Mexico side of St. Vincent Island, Florida\nHow was the data generated: The data was generated by using either a gillnet or bottom longline and bait to sample sharks and record their biological informaiton and diet information\nStructure: .csv file\nFormatting descisions: Day, Month, and Year each have their own separate columns\nData Validation / Quality control: This is from a government site so it will hopefully be of good quality some missing values\nLicense: There is no Data Access Policy or Use Constraints listed\nhttps://catalog.data.gov/dataset/shark-and-red-snapper-bottom-longline-survey\nWho collected the Data: The Southeast Fisheries Science Center which is a part of NOAA\nWhy was the data collected: Provide standardized, fisheries-independent information on the abundance and distribution of shark, snapper, and grouper species\nWhat the data is about: It includes details such as species identification, measurements, weights, and life history data related to age, growth, and reproduction\nWhen the data was collected: The data was collected from 2010 to 2024\nWhere the data was collected: The data was collected on survey sites around the coasts of the Southeast of the United States and in the Gulf of Mexico\nHow was the data generated: The data was generated by using a bottom longline to collect sharks. Sampling occurred during both day and night. Live sharks were typically tagged and released unless biological samples were needed.\nStructure of the Data: excel file\nFormating desicions in the data: Station Date is formatted : YYYY,MM,DD HH:MM:SS Species name is listed as its scientific name\nData Validation / Quality Control: This is from a government site so it will hopefully be of good quality\nLicense: No specific license is provided\nhttps://data.ca.gov/dataset/shark-incident-database-california\nWho collected the Data: The California Department of Fish and Wildlife\nWhy was the data collected: Data are added whenever a shark incident occurs, this can be more or less frequent\nWhat the data is about: It includes details such as information on the date, time, location, water depth, human activity, injury (if any), species of shark, and source information.\nWhen the data was collected: The data was collected from 1950 to 2022\nWhere the data was collected: The data was collected on the coasts of California\nHow was the data generated: The data is generated whenever a shark incident occurs, this can be more or less frequent\nStructure of the Data: excel file\nFormating desicions in the data: Date is formatted : YYYY-MM-DD Time is formatted : 0.__ hrs Species name is listed as its common name, there are two blue sharks, one blue and one blue*\nData Validation / Quality Control: This is from a government site so it will hopefully be of good quality\nLicense: No specific license is provided There are no restrictions on public use\nhttps://geo.pacioos.hawaii.edu/geoserver/web/npmv1UZSWswBsFRdH0hAuV6DPDdMGJhqufNuSr_FyK6pxar_keu6ePNLUZl5z61U7vLlwYzFYdhE0ElMNsAbjzexXAoBTRusRTKeqfkmSwA/npm5a/r_F98\n(Hawai?)`iTigerShark\n\n\nReading layer `hi_pacioos_all_shark_tiger' from data source \n  `C:\\Users\\jesus\\Downloads\\Spring 2025\\STAT 349\\HW\\Week 5\\business-report-jesusrod44\\Datasets\\Shark Datasets\\PACIOOS_WMS_ONLY-hi_pacioos_all_shark_tiger.kml' \n  using driver `KML'\nSimple feature collection with 7036 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -175.757 ymin: 13.6315 xmax: -146.933 ymax: 33.408\nGeodetic CRS:  WGS 84\n\n\nWho collected the Data: The Pacific Islands Ocean Observing System\nWhy was the data collected: Data was collected in order to track Behavioral and Oceanographic Data of tiger sharks\nWhat the data is about: The movements of tiger sharks\nWhen the data was collected: The data was collected from 2016 to the present\nWhere the data was collected: The data was collected on the ocean coasts of Hawaii\nHow was the data generated: The data is generated when a tiger shark is tagged by the data collectors\nStructure of the Data: KML file\nFormating desicions in the data: Spatial KML Data, any desciption of an observation is in a spatial column that is hard to read\nThere is only one species recorded and that is tiger sharks\nData Validation / Quality Control: This is from an educational site so it will hopefully be of good quality\nLicense: No specific license is provided\nThese datasets contain tornado information such as latitude, longtitude, magnitude, and category : https://www.ncdc.noaa.gov/stormevents/\n“Storm Events Database | National Centers for Environmental Information” (n.d.)\n\n\n# A tibble: 67,036 × 51\n   BEGIN_YEARMONTH BEGIN_DAY BEGIN_TIME END_YEARMONTH END_DAY END_TIME\n             &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;\n 1          202405        23       1947        202405      23     1947\n 2          202411        16        230        202411      18     1421\n 3          202405        19       1839        202405      19     1902\n 4          202405        23       2155        202405      23     2155\n 5          202411        22        400        202411      22     1100\n 6          202411         1          0        202411       1     1600\n 7          202411         1          0        202411       1     1600\n 8          202411        22        300        202411      22     1000\n 9          202411        22        200        202411      22     1000\n10          202411        17       1100        202411      18     2100\n# ℹ 67,026 more rows\n# ℹ 45 more variables: EPISODE_ID &lt;dbl&gt;, EVENT_ID &lt;dbl&gt;, STATE &lt;chr&gt;,\n#   STATE_FIPS &lt;dbl&gt;, YEAR &lt;dbl&gt;, MONTH_NAME &lt;chr&gt;, EVENT_TYPE &lt;chr&gt;,\n#   CZ_TYPE &lt;chr&gt;, CZ_FIPS &lt;dbl&gt;, CZ_NAME &lt;chr&gt;, WFO &lt;chr&gt;,\n#   BEGIN_DATE_TIME &lt;chr&gt;, CZ_TIMEZONE &lt;chr&gt;, END_DATE_TIME &lt;chr&gt;,\n#   INJURIES_DIRECT &lt;dbl&gt;, INJURIES_INDIRECT &lt;dbl&gt;, DEATHS_DIRECT &lt;dbl&gt;,\n#   DEATHS_INDIRECT &lt;dbl&gt;, DAMAGE_PROPERTY &lt;chr&gt;, DAMAGE_CROPS &lt;chr&gt;, …\n\n\nWho collected the Data: The data was collected by the NCEI which is a port of NOAA\nWhy was the data collected: To document tornadoes that cause harm, property damage, or economic disruption\nWhat the data is about: The description, location, and magnitude of tornadoes in the United States\nWhen the data was collected: The datasets listed here are from 1950, and from 2020-2024. The NCEI has been documenting tornadoes since 1950. Each year is contained in its own dataframe before any data cleaning is done\nWhere the data was collected: The United Sates\nHow was the data generated: The National Weather Service is the main source of tornado data, which they collect through their network of weather forecast offices\nStructure of the Data: .csv file\nFormating desicions in the data: Dates are listed as YEARMONTH: YYYYMM, and Days are listed as Start Day and End Day\nData Validation / Quality Control: This is from a government site so it will hopefully be of good quality There are some missing values in the data\nLicense: No specific license is provided\nHere is the dataset I chose to plot coastal data: https://pubs.usgs.gov/of/2013/1284/title_page.html\nWho collected the Data: The data was collected by the United States Geological Survey\nWhy was the data collected: The data was collected to create a shapefile of 492 Coastal Zone Management Program (CZMP) counties in the United States and some territories\nWhat the data is about: Coastline data from the United States\nWhen the data was collected: The data is from coastal ground conditions in 2009\nWhere the data was collected: The United Sates\nHow was the data generated: The CZMP counties shapefile was created using a three-step process involving the 2008 TIGER/Line shapefile, a NOAA list of CZMP counties, and reconciliation with historical county changes. In 2009, updates were made to align with the latest TIGER/Line data, increasing the dataset to 492 counties and 501 polygons. The shapefile was further revised following Alaska’s withdrawal from the CZMP in 2011, but Alaskan county equivalents were retained for geographic reference, with a note that the data reflects 2009 conditions.\nStructure of the Data: .shp file There is also a lot of other files that are contained in the Coastal Datasets folder in the Datasets folder\nFormating desicions in the data: The ‘geometry’ column contains shape data on the latitude and longitude of the coasts that will need to be properly formatted when plotting\nData Validation / Quality Control: This is from a government site so it will hopefully be of good quality\nLicense: No specific license is provided From the USGS: “The USGS is committed to and is making every possible effort to ensure that all electronic and information technology developed, procured, maintained, or used by the USGS is accessible to people with disabilities, including both our employees and the customers we serve.”\nSuggested Data Analysis Methods :\nUse the Latitude and Longitude columns to plot the location of each shark When the shapefile for the coastal areas are plotted, we can see where these sharks are compared to the coastal areas Next, plot the torando start points and end points are plotted and find a way to code each tornado to a color or shape to help identify their category strength or magnitude\nFinally, we can see if there is a high density of tornadoes that form close to the coast and also near shark infested waters that move inwards towards cities\n\n\n\n\n“Storm Events Database | National Centers for Environmental Information.” n.d. https://www.ncdc.noaa.gov/stormevents/.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Draft: Data Documentation</span>"
+    ]
+  },
+  {
+    "objectID": "draft-results2.html",
+    "href": "draft-results2.html",
+    "title": "Appendix B — Draft: Results2",
+    "section": "",
+    "text": "C Results\nTornadoes that form over water (also known as “Waterspouts”) in shark-infested waters, that also move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie ‘Sharknado’.\nWhen plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing $5000 in damages. But when compared to tornadoes, this is very minuscule. This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor EF Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes.\n\nggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + labs( title = \"Average Property Damage by Tornadoes and Waterspouts 2020-2024\", x = \"Event Type\", y = \"Cost of Damage ($)\", tag= \"Figure 1\", caption = 'Waterspouts are very weak when compared to tornadoes. Their average in property damage is a $7.96.') + theme_minimal()\n\n\n\n\n\n\n\n\nTornadoes that are strong enough to carry the weight of sharks do not typically form near the coasts.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nObserved Proportion of EF4 tornadoes: 0.0021 \n\n\nObserved Percentage of EF4 tornadoes: 0.21 %\n\n\nUnder the assumption that if an EF4 or EF5 tornado forms near the coast, they will become sharknados, the likelihood that would happen is very low\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n[1] 0\n\n\n[1] 0.008071882\n\n\nOne-tailed p-value: 0 \n\n\nGiven these very specific conditions: sharks are swimming close to the surface of the ocean. An EF5 tornado is the only tornado would be needed to carry sharks such as the hammerhead, tiger, and white shark. Given that there is no EF5 tornado observed in the data and EF4 tornadoes are also known to launch cars a considerable distance, we can assume that EF4 tornadoes will become sharknados when formed near the coast.\nAssuming each tornado is independent of each other, and there EF scales are identically distributed, meaning that the relationship between EF scale and location is random. A bootstrap sample can be done to test that the probability of an EF4 tornado forming on the coast will happen at random, meaning that there is a chance that a tornado powerful enough to carry sharks (given the right conditions) will theoretically happen at random.\nA null hypothesis of Ho: p = 0.20 is made. This null states that the probability of a EF4 tornado is equal to 20%, that also means all 5 categories have an equal chance of occurring. An alternative hypothesis states Ha: p &lt; 0.20, meaning the chance of a tornado being an EF4 tornado on the coast is less than 0.20.\nThe observed proportion of EF4 tornadoes in our data is 0.0021 meaning, that in our observed sample, it is very unlikely for EF4 tornadoes to form near the coast. When bootstrapping, a bootstrapped observed proportion of EF4 tornadoes is 0.0080719. The tells us that the probability of our observation happening at random is approaching very closely to 0.\nWe do not have enough evidence to say that these EF4 and EF5 tornadoes appear on the coasts at random, so we must reject that idea and can confirm that it is not likely that tornadoes with the potential to cause shark-infested terror will be a threat people should be worried about in the future.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Draft: Results2</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html",
+    "href": "draft-intro-conclusions.html",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "",
+    "text": "D Introduction",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#a-real-life-sharknado",
+    "href": "draft-intro-conclusions.html#a-real-life-sharknado",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "D.1 A Real Life Sharknado?",
+    "text": "D.1 A Real Life Sharknado?\nThere is a growing concern over the possibility of a real life Sharknado, a tornado that forms over water, gathers sharks in its powerful vortex, and then travels onto land, carrying the sharks with it. These sharknados wreak havoc all throughout the United States in locations like Los Angeles, New York City, and even Washington D.C. all the way down to Orlando, Florida raining sharks down from the sky. There have been circumstances where tornadoes have picked up animals such as fish and frogs, if one’s imagination is not limited, one could see it be possible for tornadoes to carry sharks. Although this concept originates science fiction movie series, it raises serious questions on how thin the line between fiction and reality might be when it comes to such a catastrophic event.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#tornadoes-and-sharks",
+    "href": "draft-intro-conclusions.html#tornadoes-and-sharks",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "D.2 Tornadoes and Sharks",
+    "text": "D.2 Tornadoes and Sharks\nTo help figure out how a sharknado would be possible, the strenghts and conditions of tornadoes must be analyzed to see how they could carry these apex marine predators.\n\nD.2.1 How Strong can a Tornado Be?\nThe Enhanced Fujita Scale (EF Scale), which is used to assign a tornado a rating based on estimated wind speeds. The scores and their estimated wind speeds go as follows:",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#enhanced-fujita-ef-scale-and-wind-speeds",
+    "href": "draft-intro-conclusions.html#enhanced-fujita-ef-scale-and-wind-speeds",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "D.3 Enhanced Fujita (EF) Scale and Wind Speeds",
+    "text": "D.3 Enhanced Fujita (EF) Scale and Wind Speeds\n\n\n\nTable: Enhanced Fujita (EF) scale and corresponding wind speeds\n\n\nEF_Rating\nWind_Speed_Range\n\n\n\n\nEF0 (Weakest)\n65 - 85 mph\n\n\nEF1\n86 - 110 mph\n\n\nEF2\n111 - 135 mph\n\n\nEF3\n136 - 165 mph\n\n\nEF4\n166 - 200 mph\n\n\nEF5 (Strongest)\nOver 200 mph\n\n\n\n\n\nMinor damage such as broken tree branches and roof shingles being blown away can be expected from EF0 tornadoes. While on the other end of the spectrum, EF5 tornadoes can promise wind speeds that can decimate well built homes and infrastructure. These tornadoes can carry objects like cars with no trouble. An EF2 tornado is where we finally see enough force for winds to pick up a small car around 2000lbs, but not enough force for it to be thrown wildly. In the center, an EF3 tornado can remove the roofs off buildings on uproot small trees. An EF4 tornado is where we finally begin to see heavy objects such as trucks, cars, and semis be thrown around considerable distances.\nAn EF5 tornado will for sure have the potential to be a sharknado, and another contender is the EF4 tornado and maybe, if the conditions are just right, an EF3 tornado might be able to, however, this is being very generous. Our sharknado would realistically have to be a category EF5 or EF4 tornado in order to cause terror similar to the film.\n\nD.3.1 Tornado or Waterspout?\nThis sharknado would need to have a tornado that forms over shark infested waters. A tornado that forms over water is usually classified as a waterspout. Waterspouts are not classified as tornadoes, so they are not given a score on the EF scale. If a waterspout moves on shore however, The National Weather Service classifies it as a tornado and issues a tornado warning for the area.\nWaterspouts are generally broken into two categories: fair weather waterspouts and tornadic waterspouts. Fair weather waterspouts to put it simply are a less dangerous event that form during relatively calm weather and are not associated with thunderstorms. The phenonema of interest are tornadic waterspouts. These have the same characteristics of a land tornado, they are often accompanied by high winds, severe thunderstorms, large hail. It is essentially a tornado that forms over water, but it can also form by a tornado moving from land to water. If a sharknado would occur this is how it would form!\n\n\nD.3.2 Sharks in Infested Waters in the United Sates\nSharks are found in coastal waters along the East Coast, Gulf of Mexico, and the Caribbeans. These waters are where a sharknado would have to form.\nSharks vary greatly in size and weight. Some common sharks and their average adult weights include:\n\n\n\nTable: Shark species and typical weight ranges\n\n\nSpecies\nWeight_Range_lbs\n\n\n\n\nAtlantic Sharpnose\n15 - 25\n\n\nAtlantic Blacktip\n66 - 200\n\n\nTiger\n850 - 1400\n\n\nHammerhead\n500 - 1000\n\n\nSandtiger\n200 - 350\n\n\nThe Great White\n1500 - 2400\n\n\n\n\n\nThe sharks that were commonly seen inside the sharknado were the tiger shark, the hammerhead shark, and of course, the great white shark.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#can-a-sharknado-actually-occur",
+    "href": "draft-intro-conclusions.html#can-a-sharknado-actually-occur",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "D.4 Can a Sharknado Actually Occur?",
+    "text": "D.4 Can a Sharknado Actually Occur?\nIs it possible to predict if a sharknado can happen in real life using exisiting data about sharks and tornadoes from years past?\nTo answer this burning question, a scrutinizing look at meteorological and marine data must be done.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#tornadic-waterspouts-powerful-enough-to-carry-sharks-and-makes-landfall-is-an-unlikely-event",
+    "href": "draft-intro-conclusions.html#tornadic-waterspouts-powerful-enough-to-carry-sharks-and-makes-landfall-is-an-unlikely-event",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "E.1 Tornadic Waterspouts Powerful Enough to Carry Sharks And Makes Landfall is an Unlikely Event",
+    "text": "E.1 Tornadic Waterspouts Powerful Enough to Carry Sharks And Makes Landfall is an Unlikely Event\nKey findings suggest that a sharknado is not likely to occur. Waterspouts do tend to form in shark infested waters, but these are not powerful enough to lift sharks that can weight up to 2400 lbs and relocate them to land. From the more powerful of the two types of waterspouts, tornadic waterspouts’ power are limited and never seem to make landfall.\n\nE.1.1 There is a Little Amount of Tornadoes with a High Enough EF Scale that form near the coasts\nTornadoes that do form near the coasts typically have an EF rating of EF2 or lower. An EF2 tornado has the power to lift a car and move it a ways from where it was, but when trying to find the possibility of lifting sharks throughout a city, a stronger EF4 tornado is very well needed to pull the sharks from the depths of the water. Although there are some EF3 tornadoes present in Florida, and EF3 tornadoes could pick up a car and throw them a considerable distance, the chance that sharks are swimming near the surface of the water to be pulled into the vortex is low. There is an EF4 tornado located in Georgia, however this tornado is not close enough to the ocean coasts that it would be able to make contact with the sharks present there.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#real-world-interpretation",
+    "href": "draft-intro-conclusions.html#real-world-interpretation",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "E.2 Real World Interpretation",
+    "text": "E.2 Real World Interpretation\nPeople of the United States that live on the coasts can be clear of mind that a sharknado will not be one of their worries when it comes to weather events such as hurricanes and tropical storms.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#limitations-in-data-and-knowledge",
+    "href": "draft-intro-conclusions.html#limitations-in-data-and-knowledge",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "E.3 Limitations in Data and Knowledge",
+    "text": "E.3 Limitations in Data and Knowledge\n\nE.3.1 No Free Shark Survey Dataset (From a Trusted Source) that Has Observations on the West Coast or Northeast of America\nAlthough our data showed that tornadic waterspouts and tornadoes that form near the coasts of America do not form too often and are not that powerful, there was not much comparison when plotting those events against sharks surveyed or spotted outside of the Southeast or Hawaii. Data for California was found, however that was not survey or tracking data, rather it was shark incident data. This leads to more sharks being plotted in places that have more people, preventing an evenly distribution of shark points on the map. Due to this limitation, our interpretation can only be justified that people on the coasts of the Southeast region of America near the Gulf of Mexico, Hawaii, and California.\n\n\nE.3.2 Bootstrapping\nOur probability observed from our bootstrapped sample of 0.008, only tells us that if the EF scales of the tornadoes in our dataset were randomized, and they were measured on the tornadoes near the coasts, that is the long run proportion of EF4 and EF5 tornadoes that will form near the coasts. However, the way the coastal data is set up, these tornadoes can be technically in the coastal region plotted, but be too far away from the coastline to be able to cause havoc with sharks. Our bootstrap probability is then not really the true average amount of tornadoes that would be able to lift sharks, and in reality it could be greater or it could be less.\n\n\nE.3.3 Hurricanes?\nIn this report, only tornadoes were considered. This can be a bit problematic when looking at a place like Hawaii. There are very little tornadoes recorded in Hawaii, yet a lot of sharks. It could be argued, that a hurricane of great strength could be enough to lift the numerous sharks surrounding Hawaii, but in as stated previous, we are not interested in Shark-icanes.\n\n\nE.3.4 Comparing Tornadoes and Waterspouts\nWaterspouts do not have any classification of power similar to tornadoes. There in order to compare the differences in power between the two, the observed damage to property was looked at. A problem with this is that waterspouts will most likely be less damaging as they are not near much property at all when forming. This caused the averages to be compared instead, but there is still some limitations on how far the implication of just how strong waterspouts can be.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-intro-conclusions.html#future-directions-and-implications",
+    "href": "draft-intro-conclusions.html#future-directions-and-implications",
+    "title": "Appendix C — Draft: Intro/Conclusions",
+    "section": "E.4 Future Directions and Implications",
+    "text": "E.4 Future Directions and Implications\nIf a budget allows, using private data may be able to help know just how close these coastal tornadoes and tornadic waterspouts are to the shark population of America.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Draft: Intro/Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "draft-exec-summary.html",
+    "href": "draft-exec-summary.html",
+    "title": "Appendix D — Draft: Executive Summary",
+    "section": "",
+    "text": "The Sharknado film series takes the idea of tornadoes picking up marine life to a dramatic extreme. While there has not been a documented case of a tornado hurling sharks onto land, we explored whether such an event is even scientifically plausible. We examined whether powerful tornadoes could form over or near coastal shark-infested waters, lift sharks into the air, and carry them inland.\nTo assess the likelihood of a tornado capturing sharks within its vortex and terrorizing the public, we analyzed tornado data from 2020 to 2024 and shark population data near U.S. coastlines, particularly around the Gulf of Mexico. We defined three key conditions that are required for a Sharknado to occur: (1) a tornado must be strong enough to lift a shark, (2) it must form over or near shark-inhabited waters, and (3) it must move inland.\nOur findings indicate that waterspouts, tornadoes that form over water, are generally weaker than their land-based counterparts and are unlikely to lift large animals such as sharks. On the other hand, stronger tornadoes typically do not form directly over water or in close proximity to shark habitats. The two types of tornadoes with the potential to lift sharks from the water are EF4 and EF5 tornadoes given the very specific conditions that sharks are near the surface of the water. Assuming that if tornadoes form relatively near the coasts of the United States and shark-inhabited waters, the observed probability of EF4 and EF5 tornadoes forming on the coast is 0.0021. When bootstrapping under the assumption that each scale of tornado has an equal chance of happening ( Null: p = 0.2 ), we get an observed bootstrap average of 0.008.\n\nTherefore, while the Sharknado scenario remains a thrilling fictional concept, the probability of such an event occurring any time soon in real life is extremely low.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>Draft: Executive Summary</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#cleaning-shark-data",
+    "href": "final-methods.html#cleaning-shark-data",
+    "title": "3  Methods",
+    "section": "5.1 Cleaning Shark Data",
+    "text": "5.1 Cleaning Shark Data\nNot much data wrangling was needed to prepare for shark distribution plotting. However, in California’s shark incident dataset, empty longitude and latitude were removed.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#cleaning-tornado-data",
+    "href": "final-methods.html#cleaning-tornado-data",
+    "title": "3  Methods",
+    "section": "6.1 Cleaning Tornado Data",
+    "text": "6.1 Cleaning Tornado Data\nThe storm events included in this dataset ranged from avalanches to thunderstorms. Due to interest only being in the events: Tornadoes and Waterspouts, all other unneccessary events were filtered out and removed from the data. These two events were then categorized in their own dataset.\nIn the waterspout dataset, the latter, less powerful fair weather waterspouts were removed in order to evaluate tornadic waterspouts. For this to be done, in the data’s ‘Event Narrative’ columns, where they include a brief summary on the event, only cases where the string “tornad” were selected, as this string would keep observations that discussed waterspouts that either: Were tornadic waterspouts or transformed into tornadoes.\nFor the filtered tornado dataset, observations where the EF Score of a tornado was “EFU” meaning unknown were removed in order to keep tornadoes with a properly rated EF Scale.\nIn both filtereed datasets, rows wth ‘NA’ values in thier beginning and ending latitude and longitude values were excluded.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-methods.html#preparing-coastal-data-for-plotting-maps",
+    "href": "final-methods.html#preparing-coastal-data-for-plotting-maps",
+    "title": "3  Methods",
+    "section": "7.1 Preparing Coastal Data for Plotting Maps",
+    "text": "7.1 Preparing Coastal Data for Plotting Maps\nIn order to overlay what parts our coastal data define the coasts in the United States, a plot consisting of both coordinate and spatial data was made.\nThe way to plot the coasts differed due to the data being spatial. The sf package was used to highlight (what the dataset considered) the coasts with a red outline. The coordinates were changed to make maps of the following regions: United States, The Southeast and Gulf of Mexico, The West Coast, and Hawaii.\nThis processed gave us the maps to be plotting shark and tornadoes with.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Methods</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#how-strong-can-a-tornado-be",
+    "href": "final-intro.html#how-strong-can-a-tornado-be",
+    "title": "2  Introduction",
+    "section": "4.1 How Strong can a Tornado Be?",
+    "text": "4.1 How Strong can a Tornado Be?\nThe Enhanced Fujita Scale (EF Scale), which is used to assign a tornado a rating based on estimated wind speeds. The scores and their estimated wind speeds go as follows:\n\n4.1.1 Enhanced Fujita (EF) Scale and Wind Speeds\n\n\n\nTable: Enhanced Fujita (EF) scale and corresponding wind speeds\n\n\nEF_Rating\nWind_Speed_Range\n\n\n\n\nEF0 (Weakest)\n65 - 85 mph\n\n\nEF1\n86 - 110 mph\n\n\nEF2\n111 - 135 mph\n\n\nEF3\n136 - 165 mph\n\n\nEF4\n166 - 200 mph\n\n\nEF5 (Strongest)\nOver 200 mph\n\n\n\n\n\nMinor damage such as broken tree branches and roof shingles being blown away can be expected from EF0 tornadoes. While on the other end of the spectrum, EF5 tornadoes can promise wind speeds that can decimate well built homes and infrastructure. These tornadoes can carry objects like cars with no trouble. An EF2 tornado is where we finally see enough force for winds to pick up a small car around 2000lbs, but not enough force for it to be thrown wildly. In the center, an EF3 tornado can remove the roofs off buildings on uproot small trees. An EF4 tornado is where we finally begin to see heavy objects such as trucks, cars, and semis be thrown around considerable distances.\nAn EF5 tornado will for sure have the potential to be a sharknado, and another contender is the EF4 tornado and maybe, if the conditions are just right, an EF3 tornado might be able to, however, this is being very generous. Our sharknado would realistically have to be a category EF5 or EF4 tornado in order to cause terror similar to the film.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#tornado-or-waterspout",
+    "href": "final-intro.html#tornado-or-waterspout",
+    "title": "2  Introduction",
+    "section": "4.2 Tornado or Waterspout?",
+    "text": "4.2 Tornado or Waterspout?\nThis sharknado would need to have a tornado that forms over shark infested waters. A tornado that forms over water is usually classified as a waterspout. Waterspouts are not classified as tornadoes, so they are not given a score on the EF scale. If a waterspout moves on shore however, The National Weather Service classifies it as a tornado and issues a tornado warning for the area.\nWaterspouts are generally broken into two categories: fair weather waterspouts and tornadic waterspouts. Fair weather waterspouts to put it simply are a less dangerous event that form during relatively calm weather and are not associated with thunderstorms. The phenonema of interest are tornadic waterspouts. These have the same characteristics of a land tornado, they are often accompanied by high winds, severe thunderstorms, large hail. It is essentially a tornado that forms over water, but it can also form by a tornado moving from land to water. If a sharknado would occur this is how it would form!",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "final-intro.html#sharks-in-waters-in-the-united-sates",
+    "href": "final-intro.html#sharks-in-waters-in-the-united-sates",
+    "title": "2  Introduction",
+    "section": "4.3 Sharks in Waters in the United Sates",
+    "text": "4.3 Sharks in Waters in the United Sates\nSharks are found in coastal waters along the East Coast, Gulf of Mexico, and the Caribbeans. These waters are where a sharknado would have to form.\nSharks vary greatly in size and weight. Some common sharks and their average adult weights include:\n\n\n\nTable: Shark species and typical weight ranges\n\n\nSpecies\nWeight_Range_lbs\n\n\n\n\nAtlantic Sharpnose\n15 - 25\n\n\nAtlantic Blacktip\n66 - 200\n\n\nTiger\n850 - 1400\n\n\nHammerhead\n500 - 1000\n\n\nSandtiger\n200 - 350\n\n\nThe Great White\n1500 - 2400\n\n\n\n\n\nThe sharks that were commonly seen inside the sharknado were the tiger shark, the hammerhead shark, and of course, the great white shark.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  }
+]

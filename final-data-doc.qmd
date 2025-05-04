@@ -1,0 +1,173 @@
+---
+title: "Data Documentation"
+editor: visual
+---
+
+# Overview
+
+This document summarizes several shark, tornado, and coastal datasets used to investigate spatial relationships between tornado-prone regions, shark distributions, and coastal areas. It describes the origin, purpose, structure, and limitations of each dataset.
+
+## Shark Data
+
+Four shark datasets were used in this business report. Three come from trusted government agencies and report a survey of sharks tagged in the Gulf of Mexico, Florida, and Hawaii. The fourth one differs from the rest, being that it is data recorded on shark incidents in California.
+
+### Blacktip Shark Biological Data (2008–2010)
+
+Source: NOAA InPort
+
+Collected by: Southeast Fisheries Science Center (SEFSC), National Oceanic and Atmospheric Administration (NOAA)
+
+Purpose: To study the foraging ecology of juvenile blacktip sharks in Florida and assess resource overlap
+
+Coverage: Crooked Island Sound and Gulf of Mexico side of St. Vincent Island, Florida
+
+Period: 2008–2010
+
+Data Format: .csv file with separate columns for Day, Month, and Year
+
+Structure: Biological and diet information of sharks, recorded through gillnets and longlines
+
+Data Quality:
+
+-   Government source (NOAA); some missing values
+
+-   No listed license or use restrictions
+
+### NMFS Bottom Longline Survey Data (2010–2024)
+
+Source: Data.gov
+
+Collected by: SEFSC, NOAA
+
+Purpose: To provide standardized, fisheries-independent data on sharks, snappers, and groupers
+
+Coverage: U.S. Southeast and Gulf of Mexico
+
+Period: 2010–2024
+
+Data Format: Excel .xlsx file
+
+Structure: Scientific names, measurements, weights, life history traits
+
+Collection Method: Bottom longline surveys (day and night); sharks tagged or sampled
+
+Formatting:
+
+-   Station Date: YYYY,MM,DD HH:MM:SS
+
+-   Species Name: Scientific name
+
+Data Quality:
+
+-   Government source (NOAA)
+
+-   No license listed
+
+### Hawaii Tiger Shark Tracking Data (2016–Present)
+
+Source: Pacific Islands Ocean Observing System (PACIOOS)
+
+Collected by: PACIOOS
+
+Purpose: To monitor the movement of tiger sharks using satellite tags
+
+Coverage: Hawaii coastal waters
+
+Period: 2016–Present
+
+Data Format: KML (spatial) file
+
+Structure:
+
+-   One species: Tiger sharks
+-   Spatial metadata embedded in geometry (KML) Data
+
+Quality:
+
+-   Educational/research data
+
+-   Spatial column parsing may require additional formatting
+
+-   No license or usage policy listed
+
+### California Shark Incident Database (1950–2022)
+
+Source: data.ca.gov
+
+Collected by: California Department of Fish and Wildlife
+
+Purpose: To document shark incidents along California coasts
+
+Coverage: California coastal waters
+
+Period: 1950–2022
+
+Data Format: Excel .xlsx file
+
+Structure & Key Fields:
+
+-   Date: YYYY-MM-DD
+-   Time: Decimal hours (e.g., 13.5 hrs)
+-   Shark Species: Common names (e.g., Blue, Blue\* indicates uncertain ID)
+-   Details: Human activity, injury, depth, location, and source Data Quality:
+-   Public dataset with no usage restrictions
+-   Some incidents have unknown species recorded
+
+## Tornado Data
+
+Five datasets from the past 5 years, each containing information for a different year, were analyzed in this report. All datasets were taken from the same source.
+
+### NOAA Sotrm Events Data (2020-2025)
+
+Source: NOAA Storm Events Database
+
+Collected by: National Centers for Environmental Information (NCEI), NOAA
+
+Purpose: To track tornado-related damage and conditions in the U.S.
+
+Coverage: United States (all states)
+
+Period: 2020–2025 (annual datasets)
+
+Data Format: .csv files
+
+Structure & Fields:
+
+-   Date: YEARMONTH (e.g., 202403)
+-   Location: Latitude, Longitude
+-   Magnitude: Tornado category (EF scale)
+
+Data Quality:
+
+-   Official government dataset; some missing values
+-   No formal licensing stated
+
+## Coastal Data
+
+Only one dataset for coastal data was utilized in this report.
+
+### U.S. Coastal Zone Management Counties (2009)
+
+Source: USGS Open File Report 2013-1284
+
+Collected by: U.S. Geological Survey (USGS)
+
+Purpose: To define official CZMP counties for coastal analysis
+
+Coverage: 492 counties across the U.S. and territories
+
+Period: Based on 2009 coastal conditions
+
+Data Format: .shp shapefile with spatial geometry column
+
+Structure:
+
+-   Multiple associated shapefile components (.shp, .shx, .dbf, etc.)
+
+-   Includes polygons with latitude/longitude of each coastal county
+
+Data Quality:
+
+-   Government dataset
+
+-   No specific liscense given
