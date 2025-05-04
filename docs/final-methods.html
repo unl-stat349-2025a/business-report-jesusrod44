@@ -121,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./final-intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Intro</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -139,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./final-conclusion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -159,26 +159,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./draft-data-doc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Draft: Data Documentation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./draft-results2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Draft: Results2</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./draft-intro-conclusions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Draft: Intro/Conclusions</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./draft-exec-summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Draft: Executive Summary</span></span></a>
+  <a href="./final-data-doc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Data Documentation</span></span></a>
   </div>
 </li>
       </ul>
@@ -246,6 +228,271 @@ ul.task-list li input[type="checkbox"] {
 <section id="cleaning-shark-data" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="cleaning-shark-data"><span class="header-section-number">5.1</span> Cleaning Shark Data</h2>
 <p>Not much data wrangling was needed to prepare for shark distribution plotting. However, in California’s shark incident dataset, empty longitude and latitude were removed.</p>
+<p>These are the following sharks included in each dataset.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Table 3: Names and Estimated Weights of Sharks in California Dataset</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Scientific Name</th>
+<th style="text-align: left;">Common Name</th>
+<th style="text-align: right;">Max Weight (lbs)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PRIONACE_GLAUCA</td>
+<td style="text-align: left;">Blue</td>
+<td style="text-align: right;">400</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SPHYRNA_MOKARRAN</td>
+<td style="text-align: left;">Hammerhead</td>
+<td style="text-align: right;">992</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ORCINUS_ORCA</td>
+<td style="text-align: left;">Killer Whale</td>
+<td style="text-align: right;">8800</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TRIAKIS_SEMIFASCIATA</td>
+<td style="text-align: left;">Leopard</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LAMNA_DITROPIS</td>
+<td style="text-align: left;">Salmon</td>
+<td style="text-align: right;">992</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NOTORYNCHUS_CEPEDIANUS</td>
+<td style="text-align: left;">Sevengill</td>
+<td style="text-align: right;">1100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ALOPIAS_VULPINUS</td>
+<td style="text-align: left;">Thresher</td>
+<td style="text-align: right;">1102</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UNKNOWN</td>
+<td style="text-align: left;">Unknown</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARODON_CARCHARIAS</td>
+<td style="text-align: left;">White</td>
+<td style="text-align: right;">5000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Table 4: Names and Estimated Weights of Sharks in Gulf of Mexico and Altantic Dataset</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Scientific Name</th>
+<th style="text-align: left;">Common Name</th>
+<th style="text-align: right;">Max Weight (lbs)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ALOPIAS_VULPINUS</td>
+<td style="text-align: left;">Common Thresher</td>
+<td style="text-align: right;">1102.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CARCHARHINUS_ACRONOTUS</td>
+<td style="text-align: left;">Blacknose</td>
+<td style="text-align: right;">39.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARHINUS_ALTIMUS</td>
+<td style="text-align: left;">Bignose</td>
+<td style="text-align: right;">370.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CARCHARHINUS_BREVIPINNA</td>
+<td style="text-align: left;">Spinner</td>
+<td style="text-align: right;">198.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARHINUS_FALCIFORMIS</td>
+<td style="text-align: left;">Silky</td>
+<td style="text-align: right;">762.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CARCHARHINUS_ISODON</td>
+<td style="text-align: left;">Finetooth</td>
+<td style="text-align: right;">30.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARHINUS_LEUCAS</td>
+<td style="text-align: left;">Bull</td>
+<td style="text-align: right;">507.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CARCHARHINUS_LIMBATUS</td>
+<td style="text-align: left;">Blacktip</td>
+<td style="text-align: right;">269.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARHINUS_OBSCURUS</td>
+<td style="text-align: left;">Dusky</td>
+<td style="text-align: right;">762.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CARCHARHINUS_PEREZII</td>
+<td style="text-align: left;">Caribbean Reef</td>
+<td style="text-align: right;">154.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARHINUS_PLUMBEUS</td>
+<td style="text-align: left;">Sandbar</td>
+<td style="text-align: right;">257.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CARCHARHINUS_POROSUS</td>
+<td style="text-align: left;">Smalltail</td>
+<td style="text-align: right;">19.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CARCHARHINUS_SIGNATUS</td>
+<td style="text-align: left;">Night</td>
+<td style="text-align: right;">39.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CENTROPHORUS_GRANULOSUS</td>
+<td style="text-align: left;">Gulper</td>
+<td style="text-align: right;">24.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CENTROPHORUS_UYATO</td>
+<td style="text-align: left;">Little Gulper</td>
+<td style="text-align: right;">6.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CIRRHIGALEUS_ASPER</td>
+<td style="text-align: left;">Roughskin Spurdog</td>
+<td style="text-align: right;">33.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GALEOCERDO_CUVIER</td>
+<td style="text-align: left;">Tiger</td>
+<td style="text-align: right;">1984.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GINGLYMOSTOMA_CIRRATUM</td>
+<td style="text-align: left;">Nurse</td>
+<td style="text-align: right;">242.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HEPTRANCHIAS_PERLO</td>
+<td style="text-align: left;">Sharpnose Sevengill</td>
+<td style="text-align: right;">44.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HEXANCHUS_GRISEUS</td>
+<td style="text-align: left;">Bluntnose Sixgill</td>
+<td style="text-align: right;">2425.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HEXANCHUS_NAKAMURAI</td>
+<td style="text-align: left;">Bigeye Sixgill</td>
+<td style="text-align: right;">352.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MUSTELUS_CANIS</td>
+<td style="text-align: left;">Dusky Smooth-hound</td>
+<td style="text-align: right;">26.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MUSTELUS_NORRISI</td>
+<td style="text-align: left;">Narrowfin Smooth-hound</td>
+<td style="text-align: right;">15.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MUSTELUS_SINUSMEXICANUS</td>
+<td style="text-align: left;">Gulf Smooth-hound</td>
+<td style="text-align: right;">22.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NEGAPRION_BREVIROSTRIS</td>
+<td style="text-align: left;">Lemon</td>
+<td style="text-align: right;">403.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RHIZOPRIONODON_TERRAENOVAE</td>
+<td style="text-align: left;">Atlantic Sharpnose</td>
+<td style="text-align: right;">9.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SCYLIORHINUS_RETIFER</td>
+<td style="text-align: left;">Chain Catshark</td>
+<td style="text-align: right;">3.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SPHYRNA_LEWINI</td>
+<td style="text-align: left;">Scalloped Hammerhead</td>
+<td style="text-align: right;">334.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SPHYRNA_MOKARRAN</td>
+<td style="text-align: left;">Great Hammerhead</td>
+<td style="text-align: right;">992.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SPHYRNA_TIBURO</td>
+<td style="text-align: left;">Bonnethead</td>
+<td style="text-align: right;">22.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SQUALUS_ACANTHIAS</td>
+<td style="text-align: left;">Spiny Dogfish</td>
+<td style="text-align: right;">19.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SQUALUS_CUBENSIS</td>
+<td style="text-align: left;">Cuban Dogfish</td>
+<td style="text-align: right;">15.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SQUALUS_MITSUKURII</td>
+<td style="text-align: left;">Shortspine Spurdog</td>
+<td style="text-align: right;">17.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SQUATINA_DUMERIL</td>
+<td style="text-align: left;">Atlantic Angel Shark</td>
+<td style="text-align: right;">77.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Table 5: Names and Estimated Weights of Sharks in Hawaii Shark Dataset</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Scientic Name</th>
+<th style="text-align: left;">Common Name</th>
+<th style="text-align: right;">Max Weight (lbs)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GALEOCERDO_CUVIER</td>
+<td style="text-align: left;">Tiger</td>
+<td style="text-align: right;">1984.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 </section>
 <section id="tornado-data" class="level1" data-number="6">
@@ -688,7 +935,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./final-intro.html" class="pagination-link  aria-label=" &lt;span="">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Intro</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -17,16 +17,16 @@ The Enhanced Fujita Scale (EF Scale), which is used to assign a tornado a rating
 
 ### Enhanced Fujita (EF) Scale and Wind Speeds
 
-```{r, echo= FALSE} 
+```{r, echo= FALSE}
 library(knitr)  
 ef_scale <- data.frame(
   EF_Rating = c("EF0 (Weakest)", "EF1", "EF2", "EF3", "EF4", "EF5 (Strongest)"),   
   Wind_Speed_Range = c("65 - 85 mph", "86 - 110 mph", "111 - 135 mph",                        "136 - 165 mph", "166 - 200 mph", "Over 200 mph") ) 
-kable(ef_scale, caption = "Table: Enhanced Fujita (EF) scale and corresponding wind speeds")
+kable(ef_scale, caption = "Table 1: Enhanced Fujita (EF) scale and corresponding wind speeds")
 
 ```
 
-Minor damage such as broken tree branches and roof shingles being blown away can be expected from EF0 tornadoes. While on the other end of the spectrum, EF5 tornadoes can promise wind speeds that can decimate well built homes and infrastructure. These tornadoes can carry objects like cars with no trouble. An EF2 tornado is where we finally see enough force for winds to pick up a small car around 2000lbs, but not enough force for it to be thrown wildly. In the center, an EF3 tornado can remove the roofs off buildings on uproot small trees. An EF4 tornado is where we finally begin to see heavy objects such as trucks, cars, and semis be thrown around considerable distances.
+Minor damage such as broken tree branches and roof shingles being blown away can be expected from EF0 tornadoes. While on the other end of the spectrum, EF5 tornadoes can promise wind speeds that can decimate well built homes and infrastructure. These tornadoes can carry objects like cars with no trouble. An EF2 tornado is where we finally see enough force for winds to pick up a small car around 2000lbs, but not enough force for it to be thrown wildly. In the center, an EF3 tornado can remove the roofs off buildings on uproot small trees. An EF4 tornado is where we finally begin to see heavy objects such as trucks, cars, and semis be thrown around considerable distances (@TornadoesNationalOceanic).
 
 An EF5 tornado will for sure have the potential to be a *sharknado,* and another contender is the EF4 tornado and maybe, if the conditions are just right, an EF3 tornado might be able to, however, this is being very generous. Our *sharknado* would realistically have to be a category EF5 or EF4 tornado in order to cause terror similar to the film.
 
@@ -34,20 +34,20 @@ An EF5 tornado will for sure have the potential to be a *sharknado,* and another
 
 This *sharknado* would need to have a tornado that forms over shark infested waters. A tornado that forms over water is usually classified as a waterspout. Waterspouts are not classified as tornadoes, so they are not given a score on the EF scale. If a waterspout moves on shore however, The National Weather Service classifies it as a tornado and issues a tornado warning for the area.
 
-Waterspouts are generally broken into two categories: fair weather waterspouts and tornadic waterspouts. Fair weather waterspouts to put it simply are a less dangerous event that form during relatively calm weather and are not associated with thunderstorms. The phenonema of interest are tornadic waterspouts. These have the same characteristics of a land tornado, they are often accompanied by high winds, severe thunderstorms, large hail. It is essentially a tornado that forms over water, but it can also form by a tornado moving from land to water. If a *sharknado* would occur this is how it would form!
+Waterspouts are generally broken into two categories: fair weather waterspouts and tornadic waterspouts. Fair weather waterspouts to put it simply are a less dangerous event that form during relatively calm weather and are not associated with thunderstorms. The phenonema of interest are tornadic waterspouts. These have the same characteristics of a land tornado, they are often accompanied by high winds, severe thunderstorms, large hail (@usdepartmentofcommerceWaterspouts). It is essentially a tornado that forms over water, but it can also form by a tornado moving from land to water. If a *sharknado* would occur this is how it would form!
 
 ## Sharks in Waters in the United Sates
 
 Sharks are found in coastal waters along the East Coast, Gulf of Mexico, and the Caribbeans. These waters are where a *sharknado* would have to form.
 
-Sharks vary greatly in size and weight. Some common sharks and their average adult weights include:
+Sharks vary greatly in size and weight. Some common sharks and their average adult weights include (@SpeciesDirectoryNOAA) :
 
-```{r, echo=FALSE} 
+```{r, echo=FALSE}
 library(knitr)  
 sharks <- data.frame(   
   Species = c("Atlantic Sharpnose", "Atlantic Blacktip", "Tiger",               "Hammerhead", "Sandtiger", "The Great White"),   
   Weight_Range_lbs = c("15 - 25", "66 - 200", "850 - 1400",                        "500 - 1000", "200 - 350", "1500 - 2400") )  
-kable(sharks, caption = "Table: Shark species and typical weight ranges")
+kable(sharks, caption = "Table 2: Shark species and typical weight ranges")
 
 ```
 

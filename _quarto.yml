@@ -16,10 +16,7 @@ book:
     - final-conclusion.qmd
     - references.qmd
   appendices:
-    - draft-data-doc.qmd
-    - draft-results2.qmd
-    - draft-intro-conclusions.qmd
-    - draft-exec-summary.qmd
+    - final-data-doc.qmd
 
 bibliography: references.bib
 

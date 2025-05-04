@@ -30,6 +30,108 @@ Four shark datasets were used in this business report. Three come from trusted g
 
 Not much data wrangling was needed to prepare for shark distribution plotting. However, in California's shark incident dataset, empty longitude and latitude were removed. 
 
+These are the following sharks included in each dataset. 
+
+```{r, echo=FALSE, warning=FALSE, output = FALSE, message = F}
+#| label: Loading in Shark Data
+shark_survey_dataframe <- read_excel("Datasets/Shark Datasets/NMFS BLL data Susan V.xlsx")
+shark_dataframe <- read_csv("Datasets/Shark Datasets/Biological _Data_SBK.csv")
+shark_incidents_california <- read_excel(
+  "Datasets/Shark Datasets/SharkIncidents_1950_2022_220302.xlsx")
+shark_hawaii <- st_read("Datasets/Shark Datasets/PACIOOS_WMS_ONLY-hi_pacioos_all_shark_tiger.kml")
+
+```
+
+```{r, echo = FALSE, output = FALSE, message = F, warning = F}
+#| label: Shark Dataset Cleaning 
+shark_incidents_california <- shark_incidents_california %>% 
+  filter(!is.na(Latitude))
+shark_incidents_california$Longitude <- as.numeric(shark_incidents_california$Longitude)
+str(shark_incidents_california)
+```
+
+```{r, echo= FALSE, output = F, warning = F, message = F }
+#| label: Names of Sharks in our Datasets
+
+unique(shark_incidents_california$Species)
+
+# Create the lookup table (without Blue*)
+shark_table_california <- tribble(
+  ~ScientificName, ~CommonName, ~MaxWeight,
+  "PRIONACE_GLAUCA", "Blue", 400,
+  "SPHYRNA_MOKARRAN", "Hammerhead", 992,
+  "ORCINUS_ORCA", "Killer Whale", 8800,
+  "TRIAKIS_SEMIFASCIATA", "Leopard", 70,
+  "LAMNA_DITROPIS", "Salmon", 992,
+  "NOTORYNCHUS_CEPEDIANUS", "Sevengill", 1100,
+  "ALOPIAS_VULPINUS", "Thresher", 1102,
+  "UNKNOWN", "Unknown", NA,
+  "CARCHARODON_CARCHARIAS", "White", 5000
+)
+```
+
+```{r, echo = F, message = F, warning = F}
+# Display the table nicely
+kable(shark_table_california,
+      col.names = c("Scientific Name", "Common Name", "Max Weight (lbs)"),
+      align = c("l", "l", "r"),
+      caption = "Table 3: Names and Estimated Weights of Sharks in California Dataset")
+
+# create the lookup table 
+shark_table_gulf_atlantic <- tribble(
+  ~ScientificName, ~CommonName, ~MaxWeight,
+" ALOPIAS_VULPINUS", "Common Thresher        ",           1102.3, 
+" CARCHARHINUS_ACRONOTUS", "Blacknose              ",             39.7 ,
+" CARCHARHINUS_ALTIMUS", "Bignose                ",            370.4 ,
+" CARCHARHINUS_BREVIPINNA", "Spinner                ",            198.4 ,
+" CARCHARHINUS_FALCIFORMIS", "Silky                  ",            762.8, 
+" CARCHARHINUS_ISODON", "Finetooth              ",             30.0 ,
+" CARCHARHINUS_LEUCAS", "Bull                   ",            507.1 ,
+" CARCHARHINUS_LIMBATUS", "Blacktip               ",            269.0, 
+" CARCHARHINUS_OBSCURUS", "Dusky                  ",            762.8 ,
+" CARCHARHINUS_PEREZII", "Caribbean Reef         ",            154.3 ,
+" CARCHARHINUS_PLUMBEUS", "Sandbar                ",            257.9 ,
+" CARCHARHINUS_POROSUS", "Smalltail              ",             19.8 ,
+" CARCHARHINUS_SIGNATUS", "Night                  ",             39.7 ,
+" CENTROPHORUS_GRANULOSUS", "Gulper                 ",             24.3, 
+" CENTROPHORUS_UYATO", "Little Gulper          ",              6.6 ,
+" CIRRHIGALEUS_ASPER", "Roughskin Spurdog      ",             33.1 ,
+" GALEOCERDO_CUVIER", "Tiger                  ",           1984.2 ,
+" GINGLYMOSTOMA_CIRRATUM", "Nurse                  ",            242.5, 
+" HEPTRANCHIAS_PERLO", "Sharpnose Sevengill    ",             44.1 ,
+" HEXANCHUS_GRISEUS", "Bluntnose Sixgill      ",           2425.1 ,
+" HEXANCHUS_NAKAMURAI", "Bigeye Sixgill         ",            352.7, 
+" MUSTELUS_CANIS", "Dusky Smooth-hound     ",             26.5 ,
+" MUSTELUS_NORRISI", "Narrowfin Smooth-hound ",             15.4, 
+" MUSTELUS_SINUSMEXICANUS", "Gulf Smooth-hound      ",             22.0, 
+" NEGAPRION_BREVIROSTRIS", "Lemon                  ",            403.4 ,
+" RHIZOPRIONODON_TERRAENOVAE", "Atlantic Sharpnose     ",              9.9, 
+" SCYLIORHINUS_RETIFER", "Chain Catshark         ",              3.3 ,
+" SPHYRNA_LEWINI", "Scalloped Hammerhead   ",            334.1 ,
+" SPHYRNA_MOKARRAN", "Great Hammerhead       ",            992.1, 
+" SPHYRNA_TIBURO", "Bonnethead             ",             22.0 ,
+" SQUALUS_ACANTHIAS", "Spiny Dogfish          ",             19.8, 
+" SQUALUS_CUBENSIS", "Cuban Dogfish          ",             15.4 ,
+" SQUALUS_MITSUKURII", "Shortspine Spurdog     ",             17.6 ,
+" SQUATINA_DUMERIL", "Atlantic Angel Shark   ",             77.2
+)
+kable(shark_table_gulf_atlantic,
+      col.names = c("Scientific Name", "Common Name", "Max Weight (lbs)"),
+      align = c("l", "l", "r"),
+      caption = "Table 4: Names and Estimated Weights of Sharks in Gulf of Mexico and Altantic Dataset")
+
+shark_table_hawaii <- tribble(
+  ~ScientificName, ~CommonName, ~MaxWeight, 
+  " GALEOCERDO_CUVIER", "Tiger                  ",           1984.2 
+)
+
+kable(shark_table_hawaii, 
+      col.names = c('Scientic Name', "Common Name", "Max Weight (lbs)"),
+      align = c("l", "l", "r"), 
+      caption = "Table 5: Names and Estimated Weights of Sharks in Hawaii Shark Dataset")
+
+```
+
 # Tornado Data
 
 Five datasets from the past 5 years as of 2025, each containing information for a different year, were analyzed in this report. All datasets were taken from the same source, National Oceanic and Atmospheric Association (NOAA).
