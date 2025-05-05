@@ -3,14 +3,17 @@ title: "Conclusions"
 editor: visual
 ---
 
-
-# Tornadic Waterspouts Powerful Enough to Carry Sharks *And* Makes Landfall is an Unlikely Event
+# Tornadic Waterspouts Powerful Enough to Carry Sharks are not Very Realistic
 
 Key findings suggest that a sharknado is not likely to occur. Waterspouts do tend to form in shark infested waters, but these are not powerful enough to lift sharks that can weight up to 2400 lbs and relocate them to land. From the more powerful of the two types of waterspouts, tornadic waterspouts' power are limited and never seem to make landfall.
 
-## There is a Little Amount of Tornadoes with a High Enough EF Score that form near the coasts
+# There is a Little Amount of Tornadoes with a High Enough EF Score that form near the coasts
 
-Tornadoes that do form near the coasts typically have an EF rating of EF2 or lower. An EF2 tornado *has* the power to lift a car and move it a ways from where it was, but when trying to find the possibility of lifting sharks throughout a city, a stronger EF4 tornado is very well needed to pull the sharks from the depths of the water. Although there are some EF3 tornadoes present in Florida, and EF3 tornadoes could pick up a car and throw them a considerable distance, the chance that sharks are swimming near the surface of the water to be pulled into the vortex is low. There is an EF4 tornado located in Georgia, however this tornado is not close enough to the ocean coasts that it would be able to make contact with the sharks present there.
+Tornadoes that do form near the coasts typically have an EF rating of EF2 or lower, with the occasional EF3. An EF2 tornado *has* the power to lift a car and move it from where it was, but when trying to find the possibility of lifting sharks throughout a city, a stronger EF4 tornado is very well needed to pull the sharks from the depths of the water. Although there are some EF3 tornadoes present in Florida, and EF3 tornadoes could pick up a car and throw them a considerable distance, these are not capable of producing a storm where sharks, like the Great Whites and Hammerheads in the films, are thrown violently. There is an EF4 tornado located in Georgia, however this tornado is not close enough to the ocean coasts that it would be able to make contact with the sharks present there.
+
+## Assuming Perfect Conditions, it is Still Unlikely that Capable Tornadoes can Form Close Enough to the Coasts to become Sharknados
+
+Under the drastic assumption that all EF4 or higher tornadoes that form within the data's coastal perimeters will become sharknados, a long run average of `r mean_boot` is calculated. This means given perfect conditions, sharknados will form 0.81% of the time. We do not have enough evidence to state that sharknados are a probable threat in the near future, based on our tornado data from 2020-2025.
 
 # Real World Interpretation
 
@@ -24,7 +27,9 @@ Although our data showed that tornadic waterspouts and tornadoes that form near 
 
 ## Bootstrapping
 
-Our probability observed from our bootstrapped sample of 0.008, only tells us that if the EF scales of the tornadoes in our dataset were randomized, and they were measured on the tornadoes near the coasts, that is the long run proportion of EF4 and EF5 tornadoes that will form near the coasts. However, the way the coastal data is set up, these tornadoes can be technically in the coastal region plotted, but be too far away from the coastline to be able to cause havoc with sharks. Our bootstrap probability is then not really the true average amount of tornadoes that would be able to lift sharks, and in reality it could be greater or it could be less.
+Our probability observed from our bootstrapped sample of 0.008, truly only tells us that if the EF scales of the tornadoes in our dataset were randomized, this is the long run proportion of EF4 and EF5 tornadoes that will form near the coasts. However, the way the coastal data is set up, these tornadoes can be technically in the coastal region plotted, but be too far away from the coastline to be able to cause havoc with sharks. 
+
+Still regarding this, perfect conditions are assumed, and given there is no way based on the datasets collected to measure the probability of sharks being near the surface, this bootstrapped probability is only theoretical but it could be truly higher or lower.
 
 ## Hurricanes?
 
@@ -36,4 +41,4 @@ Waterspouts do not have any classification of power similar to tornadoes. In ord
 
 # Future Directions and Implications
 
-If a budget allows, using private data may be able to help know just how close these coastal tornadoes and tornadic waterspouts are to the shark population of America.
+If a budget allows, using private data may be able to help know just how close these coastal tornadoes and tornadic waterspouts are to the shark population of America. It would also be very beneficial to collect a dataset from a source that record the depth of the shark, that way, the average depth of a shark by species can be found to better predict what sharks will be near the surface on a random given day. 

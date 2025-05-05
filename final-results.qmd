@@ -3,12 +3,13 @@ title: "Results"
 editor: visual
 ---
 
+# Tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'
 
-**Tornadoes that form over water (also known as "Waterspouts") in shark-infested waters, *that also* move inwards towards land, do not have the potential to carry sharks over towards mainland cities to cause a disruption similar to the movie 'Sharknado'.**
+When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule (See Figure 1). This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. 
 
-When plotting the data for sharks and waterspouts, it is apparent that waterspouts are not a common occurrence ( at least in the past five years ). These waterspouts have not caused any major damage to property or crops, and no deaths or injuries have been recorded, they either do not possess the strength to do so and many of these waterspouts do not last longer than an hour. The most action that has happened has been an incident where a waterspout damaged two vehicles and a power line, causing \$5000 in damages. But when compared to tornadoes, this is very minuscule. This clearly shows that tornadoes that form on water lack the power necessary to lift sharks. In a perfect world, the better way to compare power is to compare levels on the Tor EF Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes.
+In a perfect world, the better way to compare power is to compare levels on the Tor EF Scale. The scale that ranks how strong a tornado is from EF1 to EF5. However, waterspouts are not considered tornadoes and they do not have a power scale similar to tornadoes.
 
-```{r, echo=FALSE, output=FALSE}
+```{r, echo=FALSE, output=FALSE, message = F, warning = F}
 #| label: Load neccessary libraries 
 library(ggplot2)
 library(readr)
@@ -23,7 +24,7 @@ library(knitr)
 library(patchwork)
 ```
 
-```{r, echo = FALSE,output = FALSE}
+```{r, echo = FALSE,output = FALSE, message = F, warning = F}
 #| label: Load Tornado Data from NOAA
 tornado_2020_2024_dataframe <- bind_rows(
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2024_c20250216.csv"),
@@ -57,7 +58,7 @@ tornado_only_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>%
 
 ```
 
-```{r, echo = FALSE, output = FALSE}
+```{r, echo = FALSE, output = FALSE, warning = F, message = F}
 #| label: Data Wrangling to get Average Property Damage Chart
 str(tornado_2020_2024_clean_dataframe)
 
@@ -75,14 +76,22 @@ property_damage_summary <- tornado_2020_2024_clean_dataframe %>%
 
 ```
 
-```{r}
+```{r, echo = FALSE, message = F, warning = F}
 #| label: Average Property Damage Caused by Tornadoes vs Waterspouts Chart
 
-ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + labs( title = "Average Property Damage by Tornadoes and Waterspouts 2020-2024", x = "Event Type", y = "Cost of Damage ($)", tag= "Figure 1", caption = 'Waterspouts are very weak when compared to tornadoes. Their average in property damage is a $7.96.') + theme_minimal()
+ggplot(property_damage_summary, aes(x = EVENT_TYPE, y = Average_Property_Damage)) + geom_col() + 
+  labs( 
+    title = "Average Property Damage by Tornadoes and Waterspouts",
+    subtitle = "(2020-2025)",
+    x = "Event Type", 
+    y = "Cost of Damage ($)", 
+    tag= "Figure 1", 
+    caption = 'Waterspouts are very weak when compared to tornadoes. Their average in property damage is a $7.96.') + 
+  theme_minimal()
 
 ```
 
-**Tornadoes that are strong enough to carry the weight of sharks do not typically form near the coasts.**
+Considering that tornadic waterspouts are not capable to cause much destruction, plotting them is still valuable to see just how common they are in the United States. Two maps (Figures 2 and 3) are given to see their distribution among the sharks around the coasts of the US and Hawaii. It is important to remember that these maps showcase only the more capable **tornadic** waterspouts. These kinds of waterspouts are the most common in Florida, while the rest of the United States lacks these specific types of events. Given they are relatively weak, rest can be assured that no sharknados can be possible from a waterspout.
 
 ```{r, echo = FALSE, output = FALSE, echo = FALSE}
 #| label: Loading In Coastal Data
@@ -143,7 +152,6 @@ str(shark_incidents_california)
 ```{r, echo = FALSE, warning=FALSE}
 #| label: Path of Waterspouts in the US
 
-
 # Now let's see the path of waterspouts in the US
 
 ######## waterspouts data
@@ -167,9 +175,12 @@ ggplot(world) +
              shape = 15,  # Square shape
              size = 0.1) +
   labs(title = "US Tornadic Waterspouts and Sharks Along US Coastlines",
+       subtitle = '(2020-2025)',
        x = "Longitude",
        y = "Latitude", 
-       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+       color = "Legend",
+       tag = "Figure 2", 
+       caption = "Very little waterspouts are actually tornadic. Florida seems to have the most activity.") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
 
 # Hawaii 
 
@@ -192,133 +203,15 @@ ggplot(world) +
              shape = 15,  # Square shape
              size = 0.1) +
   labs(title = "US Tornadic Waterspouts and Tiger Sharks Along Hawaii Coastlines",
-       x = "Longitude",
-       y = "Latitude", 
-       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
-
-# Zoomed Gulf and Atlantic
-
-ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  coord_sf(xlim = c(-100, -65), ylim = c(20, 50)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-  geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
-                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
-               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
-  ) +
-  geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
-             shape = 15,  # Square shape
-             size = 0.1) +
-  labs(title = "US Tornadic Waterspouts and Sharks Along The Gulf and Atlantic Coastlines",
-       x = "Longitude",
-       y = "Latitude", 
-       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
-
-# California
-ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-  geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
-                                               xend = END_LON, yend = END_LAT, color = "Waterspout"),
-               arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
-  ) +
-  geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
-             shape = 15,  # Square shape
-             size = 0.1) +
-  labs(title = "US Tornadic Waterspouts and Sharks Along California Coastline",
-       x = "Longitude",
-       y = "Latitude", 
-       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
-
-
-```
-
-```{r, echo = FALSE, warning=FALSE}
-#| label: Path of Tornadoes in the US
-
-# Now let's see the path of tornadoes in the US
-
-######## tornado data
-
-# ggplot(world) +
-#   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-#                fill = "gray", color = "black") +
-#   geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-#                fill = "gray", color = "black") +
-#   theme_bw() +  
-#   geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-#   coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
-#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-#   geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) + 
-#   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-#   geom_segment(data = tornado_only_2020_2024_clean_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
-#                                                  xend = END_LON, yend = END_LAT, color = "Tornado"),
-#                arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
-#                ) +
-#   geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"), 
-#              shape = 15,  # Square shape
-#              size = 0.1) +
-#   labs(title = "US Tornados and Sharks Along US Coastlines",
-#        x = "Longitude",
-#        y = "Latitude", 
-#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue")) 
-
-ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  coord_sf(xlim = c(-130, -60), ylim = c(22, 55)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
-             shape = 15,  # Square shape
-             size = 0.5) +
-  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
-       x = "Longitude",
-       y = "Latitude")
-
-# Hawaii 
-
-ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group),
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group),
-               fill = "gray", color = "black") +
-  theme_bw() +
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  geom_sf(aes(geometry = geometry), color = 'skyblue', alpha = 0.5, size = 0.2, data = shark_hawaii) +
-  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) +
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"),
-             shape = 15,  # Square shape
-             size = 1) +
-  labs(title = "US Tornados and Tiger Sharks Along Hawaii Coastlines",
+       subtitle = '(2020-2025)',
        x = "Longitude",
        y = "Latitude",
-       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue"))
+       tag = "Figure 3",
+       caption = "Although many sharks surround Hawaii, no tornadic waterspouts have formed at all.",
+       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
 
-
-# Zoomed Gulf and Atlantic
-
+# # Zoomed Gulf and Atlantic
+# 
 # ggplot(world) +
 #   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
 #                fill = "gray", color = "black") +
@@ -329,56 +222,19 @@ ggplot(world) +
 #   coord_sf(xlim = c(-100, -65), ylim = c(20, 50)) + 
 #   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
 #   geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-#   geom_segment(data = tornado_only_2020_2024_clean_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
-#                                                xend = END_LON, yend = END_LAT, color = "Tornado"),
+#   geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+#                                                xend = END_LON, yend = END_LAT, color = "Waterspout"),
 #                arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
 #   ) +
-#   geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"), 
+#   geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
 #              shape = 15,  # Square shape
 #              size = 0.1) +
-#   labs(title = "US Tornados and Sharks Along The Gulf and Atlantic Coastlines",
+#   labs(title = "US Tornadic Waterspouts and Sharks Along The Gulf and Atlantic Coastlines",
 #        x = "Longitude",
 #        y = "Latitude", 
-#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue")) 
+#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
 
-# Zoomed In Gulf of Mexico Tornadoes >= EF1
-ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  coord_sf(xlim = c(-97, -77), ylim = c(23, 33)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
-             shape = 15,  # Square shape
-             size = 1) +
-  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
-       x = "Longitude",
-       y = "Latitude")
-
-# Atlantic Coastlines
-ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  coord_sf(xlim = c(-82, -67), ylim = c(25, 52)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
-             shape = 15,  # Square shape
-             size = 1) +
-  labs(title = "US Tornadoes and Sharks Along The Atlantic Coastlines",
-       x = "Longitude",
-       y = "Latitude")
-
-
-# California
+# # California
 # ggplot(world) +
 #   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
 #                fill = "gray", color = "black") +
@@ -390,40 +246,211 @@ ggplot(world) +
 #   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
 #   geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
 #   geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-#   geom_segment(data = tornado_only_2020_2024_clean_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
-#                                                xend = END_LON, yend = END_LAT, color = "Tornado"),
+#   geom_segment(data = tornadic_waterspout_dataframe,aes(x = BEGIN_LON, y = BEGIN_LAT, 
+#                                                xend = END_LON, yend = END_LAT, color = "Waterspout"),
 #                arrow = arrow(length = unit(0.05, "cm"))  # Optional arrow
 #   ) +
-#   geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"), 
-#              shape = 15,
+#   geom_point(data = tornadic_waterspout_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Waterspout"), 
+#              shape = 15,  # Square shape
 #              size = 0.1) +
-#   labs(title = "US Tornados and Sharks Along California Coastline",
+#   labs(title = "US Tornadic Waterspouts and Sharks Along California Coastline",
 #        x = "Longitude",
 #        y = "Latitude", 
-#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue"))
+#        color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Waterspout" = "blue")) 
+
+
+```
+
+# Tornadoes that are strong enough to carry the weight of sharks do not typically form near the coasts.
+
+Visualization of the distribution of tornadoes shows that tornadoes with enough strength to pull sharks from the depths of the water form near enough to the coastlines to cause "shark-terror." In the United States, EF1 and EF2 tornadoes are very common and form throughout the Midwest and Southeast the most. EF3 tornadoes appear throughout the Midwest and Southwest as well, although they are less common. These three types of tornadoes all seem to be the most common that occur on the coasts of the United States as well. EF4 and EF5 tornadoes on the other hand, are not that common (see Figure 4). In our data, there is no data recorded for an EF5 tornado, making them the least common among them all. Our analysis did not have any tornadoes appear in Hawaii (see Figure 5).
+
+Tornadoes with less potential are more common throughout the United States. There seems to be an inverse relationship with EF Scale and Count of Tornadoes.
+
+```{r, echo = F, warning = F, message = F}
+#| label: Simplified Tornado and Shark Color Scheme
+
+custom_colors <- c(
+  "EF1" = "red", 
+  "EF2" = "orange", 
+  "EF3" = "darkgreen", 
+  "EF4" = "purple", 
+  "EF5" = "pink", 
+  "Shark" = "skyblue"
+)
+
+```
+
+```{r, echo = FALSE, warning=FALSE}
+#| label: Path of Tornadoes in the US
+
+# Now let's see the path of tornadoes in the US
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_sf(data = coastal_dataframe, aes(geometry = geometry), color = 'red') +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
+  
+  geom_point(data = shark_dataframe, 
+             aes(x = Longitude, y = Latitude, color = "Shark"), 
+             alpha = 0.5, size = 0.5) +
+  geom_point(data = shark_survey_dataframe, 
+             aes(x = `Station Longitude`, y = `Station Latitude`, color = "Shark"), 
+             alpha = 0.5, size = 0.6) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), alpha = 0.5, size = 0.6, data = shark_incidents_california) +
+
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, 
+             aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15, size = 1) +
+
+  scale_color_manual(
+    values = custom_colors,
+    breaks = c("EF1", "EF2", "EF3", "EF4", "EF5", "Shark"),
+    name = "Legend"
+  ) +
+  labs(title = "Tornadoes and Sharks Along The Coasts of the United States",
+       subtitle = "(2020-2024)",
+       x = "Longitude",
+       y = "Latitude",
+       tag = "Figure 4",
+       caption = "The weaker a tornado, the more common it is.")
+
+# Hawaii 
 
 ggplot(world) +
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "gray", color = "black") +
   geom_polygon(data = states, aes(x = long, y = lat, group = group), 
                fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-    geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
-             shape = 15,
-             size = 1) +
-  labs(title = "US Tornadoes and Sharks Along The West Coast",
+  geom_sf(data = coastal_dataframe, aes(geometry = geometry), color = 'red') +
+  geom_sf(aes(geometry = geometry, color = 'Shark'), alpha = 0.5, size = 0.2, data = shark_hawaii) +
+
+  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) +
+  
+
+  geom_point(data = tornado_only_2020_2024_clean_dataframe, 
+             aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15, size = 1) +
+
+  scale_color_manual(
+    values = custom_colors,
+    breaks = c("EF1", "EF2", "EF3", "EF4", "EF5", "Shark"),
+    name = "Legend"
+  ) +
+  labs(title = "Tornados and Tiger Sharks Along Hawaii Coastlines",
+       subtitle = "(2020-2025)",
        x = "Longitude",
-       y = "Latitude")
+       y = "Latitude",
+       tag = "Figure 5",
+       caption = "A tornado seems to be very uncommon around this shark-surrounded state.")
 
 ```
 
-```{r, echo = FALSE}
+To better illustrate the EF Scale and Tornado Count Relationship (see Figure 6). Further analysis from this point on will disregard tornadoes with an EF Scale lower than or equal to 3, as these don't have the potential to even toss cars carelessly.
+
+```{r, echo = F, warning= F, message = F}
+ggplot(tornado_only_2020_2024_clean_dataframe, aes(x = TOR_F_SCALE, fill = TOR_F_SCALE)) +
+  geom_histogram(stat = 'count') +
+  theme_minimal() +
+
+  scale_color_manual(
+    values = custom_colors,
+    breaks = c("EF1", "EF2", "EF3", "EF4", "EF5"),
+    name = "Legend"
+  ) +
+  
+  labs(title = "Tornado Frequency by EF Scale (2020–2025)",
+       x = "Tornado EF Score",
+       y = "Count",
+       fill = "EF Scale", 
+       tag = "Figure 6",
+       caption = "On the powerful side: There are 31 EF4 and 0 EF5 Tornadoes."
+  )
+```
+
+Only considering tornadoes with an EF Score greater than 3, a clearer view at the distribution of EF4 and EF5 tornadoes show that most do not tend to form near the coastlines. There are a few exceptions, yet these still are not close enough to the ocean waters to haul sharks from their habitat (See Figure 7).
+
+```{r, echo = F, message = F, warning = F, output = F}
+#| label: more tornado cleaning
+
+strong_tornadoes <- tornado_only_2020_2024_clean_dataframe %>% 
+  filter(TOR_F_SCALE == "EF4" | TOR_F_SCALE == "EF5")
+
+```
+
+```{r, echo =F , warning = F, message = F}
+# US Map again, but only those >= EF4
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_sf(data = coastal_dataframe, aes(geometry = geometry), color = 'red') +
+  coord_sf(xlim = c(-130, -60), ylim = c(20, 55)) + 
+  
+  geom_point(data = shark_dataframe, 
+             aes(x = Longitude, y = Latitude, color = "Shark"), 
+             alpha = 0.5, size = 0.5) +
+  geom_point(data = shark_survey_dataframe, 
+             aes(x = `Station Longitude`, y = `Station Latitude`, color = "Shark"), 
+             alpha = 0.5, size = 0.6) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), 
+             alpha = 0.5, size = 0.6, data = shark_incidents_california) +
+  
+  geom_point(data = strong_tornadoes, 
+             aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE), 
+             shape = 15, size = 1) +
+
+  scale_color_manual(
+    values = custom_colors,
+    breaks = c("EF1", "EF2", "EF3", "EF4", "EF5", "Shark"),
+    name = "Legend"
+  ) +
+  labs(title = "EF4 Tornadoes and Sharks of the United States",
+       subtitle = "(2020-2024)",
+       x = "Longitude",
+       y = "Latitude",
+       tag = "Figure 7",
+       caption = "Only the Southeast Coast seems to any counts of these tornadoes.")
+```
+
+It seems if a sharknado were to form, it would occur in the Southeast Coast, near Alabama and the Gulf of Mexico. Yet, these tornadoes are still not near enough to the ocean and any population of sharks. See Figure 8 for a closer inspection.
+
+```{r, echo = F, message = F, warning = F}
+
+ggplot(world) +
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               fill = "gray", color = "black") +
+  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
+  coord_sf(xlim = c(-97, -77), ylim = c(23, 33)) +
+  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), 
+             alpha = 0.5, size = 0.5, data = shark_dataframe) +
+  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), 
+             alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
+  geom_point(data = strong_tornadoes, 
+             aes(x = BEGIN_LON, y = BEGIN_LAT, color = TOR_F_SCALE),
+             shape = 15, size = 1) +
+  scale_color_manual(values = custom_colors,
+                     breaks = c("EF1", "EF2", "EF3", "EF4", "EF5", "Shark"),
+                     name = "Legend") + 
+  theme_minimal() +
+  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
+       x = "Longitude",
+       y = "Latitude", 
+       tag = 'Figure 8',
+       caption = 'There is a small amount of EF4 tornadoes and 0 EF5 tornadoes that are close to the coasts.')
+
+```
+
+```{r, echo = FALSE, warning = F, message = F}
 #| label: joining lat and long tornado points to sf coastal data
+
+second_observed_proportion <- 31/3831 ; second_observed_proportion
 
 tornado_points_sf <- st_as_sf(tornado_only_2020_2024_clean_dataframe, coords = c("BEGIN_LON", "BEGIN_LAT"), crs = 4326)
 tornado_points_sf <- st_transform(tornado_points_sf, crs = st_crs(coastal_dataframe))
@@ -433,120 +460,19 @@ coastal_tornado_points <- tornado_points_sf %>%
   st_join(coastal_dataframe, join = st_within, left = FALSE)
 
 observed_proportion_of_EF4 <- sum(coastal_tornado_points$TOR_F_SCALE == "EF4", na.rm = TRUE)/nrow(coastal_tornado_points)
-cat("Observed Proportion of EF4 tornadoes:", round(observed_proportion_of_EF4, 4), "\n")
-cat("Observed Percentage of EF4 tornadoes:", round(observed_proportion_of_EF4 * 100, 2), "%\n")
-
 
 
 ```
 
-**Under the assumption that if an EF4 or EF5 tornado forms near the coast, they will become sharknados, the likelihood that would happen is very low**
+These illustrations show that effective tornadoes are typically going to form on the coasts. In fact, the proportion of these tornadoes greater than EF3 that formed on the coastal data plotted is `r observed_proportion_of_EF4`. This is from 2 tornadoes from the 473 total tornadoes that fall inside the coastline. From the entire dataset, the probabilty a tornado is greater than EF3 is 31/3831 or `r second_observed_proportion`. This is just from our one sample of analysis.
 
-```{r, echo = FALSE, warning=FALSE}
-#| label: Checking only coastal tornadoes
+# Assuming perfect conditions, it is still unlikely that capable tornadoes can form close enough to the coasts to become a sharknado.
 
-# Now let's see the path of only coastal tornadoes in the US
-# (tornadoes near the coasts)
+Given these drastic, theoretical assumptions:
 
-######## tornado data
+-   All EF4 or higher tornadoes that form within the data's coastal perimeters will become sharknados
 
-us_map_coastal <- ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
-  coord_sf(xlim = c(-130, -60), ylim = c(22, 55)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-  labs(title = "Tornadoes and Sharks Along The Coasts of the US",
-       x = "Longitude",
-       y = "Latitude")
-
-# Hawaii 
-
-hawaii_coastal <- ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group),
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group),
-               fill = "gray", color = "black") +
-  theme_bw() +
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-  geom_sf(aes(geometry = geometry), color = 'skyblue', alpha = 0.5, size = 0.2, data = shark_hawaii) +
-  coord_sf(xlim = c(-170, -150), ylim = c(18, 30)) +
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_survey_dataframe) +
-  geom_point(data = tornado_only_2020_2024_clean_dataframe, aes(x = BEGIN_LON, y = BEGIN_LAT, color = "Tornado"),
-             shape = 15,  # Square shape
-             size = 1) +
-  labs(title = "US Tornados and Tiger Sharks Along Hawaii Coastlines",
-       x = "Longitude",
-       y = "Latitude",
-       color = "Legend") + scale_color_manual(values = c("Shark" = "skyblue", "Tornado" = "blue"))
-
-# Zoomed In Gulf of Mexico Tornadoes >= EF1
-gulf_coastal <- ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
-  coord_sf(xlim = c(-97, -77), ylim = c(23, 33)) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-  labs(title = "US Tornadoes and Sharks Along The Gulf of Mexico",
-       x = "Longitude",
-       y = "Latitude")
-
-# Atlantic Coastlines
-atlantic_coastal <- ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
-  coord_sf(xlim = c(-82, -67), ylim = c(25, 52), expand = FALSE) +
-  scale_x_continuous(breaks = seq(-82, -67, by = 3)) +
-  scale_y_continuous(breaks = seq(25, 52, by = 5)) +
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
-  labs(title = "US Tornadoes and Sharks Along The Atlantic Coastlines",
-       x = "Longitude",
-       y = "Latitude")
-
-atlantic_coastal
-
-# California
-california_coastal <- ggplot(world) +
-  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-               fill = "gray", color = "black") +
-  theme_bw() +  
-  geom_sf(aes(geometry = geometry), color = 'red', data = coastal_dataframe) +
-    geom_sf(aes(geometry = geometry, color = TOR_F_SCALE), data = coastal_tornado_points) +
-  coord_sf(xlim = c(-125, -112.5), ylim = c(30, 50),expand = FALSE) +
-  scale_x_continuous(breaks = seq(-125, -112.5, by = 3)) +
-  scale_y_continuous(breaks = seq(30, 50, by = 5)) +
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue',alpha = 0.5, size = 0.5, data = shark_dataframe) +
-  geom_point(aes(x = `Station Longitude`, y = `Station Latitude`, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.3, data = shark_survey_dataframe) + 
-  geom_point(aes(x = Longitude, y = Latitude, color = 'Shark'), fill = 'skyblue', alpha = 0.5, size = 0.6, data = shark_incidents_california) + 
- labs(title = "US Tornadoes and Sharks Along The West Coast",
-       x = "Longitude",
-       y = "Latitude")
-
-(gulf_coastal | atlantic_coastal) / (california_coastal | hawaii_coastal)
-
-```
+Using bootstrap sampling with replacement, our analysis suggests that there is a non-negligible long-run probability of dominant tornadoes forming near the coasts. Based on our data, there is not enough coastal tornadoes occur to plausibly support the hypothetical threat of a "sharknado." An observed bootstrapped proportion of EF4 tornadoes becoming sharknados is found to be `r mean_boot` (See Figure 9).
 
 ```{r, echo = FALSE, warning = FALSE}
 #| label: Bootstrap Sampling
@@ -558,10 +484,6 @@ coastal_tornado_points_bootstrap <- coastal_tornado_points
 set.seed(1)
 for (i in 1:1000) {
   
-  # # Spatial join in order to keep only the toranadoes that fall on the coastal regions This slows down the rendering SIGNIFICANTLY so it is commented out just in case it is needed later
-  # coastal_tornado_points_bootstrap <- tornado_points_sf %>%
-  #   st_join(coastal_dataframe, join = st_within, left = FALSE)
-  
   # Randomize the TOR_F_SCALE to all other tornadoes, keeps the lat and long pts the same
   coastal_tornado_points_bootstrap$TOR_F_SCALE_shuffled <- sample(tornado_points_sf$TOR_F_SCALE, size = 473, replace = TRUE)
   
@@ -571,36 +493,23 @@ for (i in 1:1000) {
   # Record the proportion of ef4 tornaodes in that sample and then repeat the process
   bootstrap_proportions$stat[i] <- prop_ef4_bootstrap
 }
+```
+
+```{r, echo = F, message = F, warning = F}
 
 boot.hist<-ggplot(bootstrap_proportions, aes(stat)) + geom_histogram(binwidth = 0.001) +
-  geom_vline(xintercept = 0.2, color = "red", linetype = "dashed") + 
+  geom_vline(xintercept = mean_boot, color = "red", linetype = "dashed") + 
   labs(title = "Histogram of Bootstrapped Proportion of EF4 and EF5 Tornadoes",
        x = "Observed Bootstrapped Proportion of EF4 and EF5 Tornadoes", 
        y = "Frequency", 
-       tag = "Figure 2.",
-       caption = "The Red Dashed Line shows the probabilty of each EF scale occuring evenly, p=0.2") + 
+       tag = "Figure 9",
+       caption = "Assuming perfect conditions, the chance that an EF4 or higher forms is on average 0.81%.") + 
   theme(plot.caption.position = "plot",
         plot.caption = element_text(hjust = 0))
 boot.hist
 ggsave("bootstrap_histogram.png", plot = boot.hist, width = 7, height = 5)
 
-
-
 # Is the probability that our observed proportion is from random chance?
-p_value_one_tailed <- mean(abs(bootstrap_proportions$stat >= abs(0.2))) ; p_value_one_tailed
-mean_boot <- mean(bootstrap_proportions$stat) ; mean_boot
-one_tailed_p <- cat("One-tailed p-value:", round(p_value_one_tailed, 4), "\n")
-
-
+mean_boot <- mean(bootstrap_proportions$stat)
 
 ```
-
-Given these very specific conditions: sharks are swimming close to the surface of the ocean. An EF5 tornado is the only tornado would be needed to carry sharks such as the hammerhead, tiger, and white shark. Given that there is no EF5 tornado observed in the data and EF4 tornadoes are also known to launch cars a considerable distance, we can assume that EF4 tornadoes will become sharknados when formed near the coast.
-
-Assuming each tornado is independent of each other, and there EF scales are identically distributed, meaning that the relationship between EF scale and location is random. A bootstrap sample can be done to test that the probability of an EF4 tornado forming on the coast will happen at random, meaning that there is a chance that a tornado powerful enough to carry sharks (given the right conditions) will theoretically happen at random.
-
-A null hypothesis of Ho: p = 0.20 is made. This null states that the probability of a EF4 tornado is equal to 20%, that also means all 5 categories have an equal chance of occurring. An alternative hypothesis states Ha: p \< 0.20, meaning the chance of a tornado being an EF4 tornado on the coast is less than 0.20.
-
-The observed proportion of EF4 tornadoes in our data is 0.0021 meaning, that in our observed sample, it is very unlikely for EF4 tornadoes to form near the coast. When bootstrapping, a bootstrapped observed proportion of EF4 tornadoes is `r mean_boot`. The tells us that the probability of our observation happening at random is approaching very closely to 0.
-
-We do not have enough evidence to say that these EF4 and EF5 tornadoes appear on the coasts at random, so we must reject that idea and can confirm that it is not likely that tornadoes with the potential to cause shark-infested terror will be a threat people should be worried about in the future.

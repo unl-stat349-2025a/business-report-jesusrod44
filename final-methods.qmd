@@ -244,18 +244,18 @@ When plotting waterspouts, only the tornadic waterspouts were considered, as the
 
 When plotting tornadoes, it is a very similar process to plotting waterspouts. In this situation, we only want tornadoes as our EVENT_TYPE. In the beginning, using geom_segment() was considered when plotting tornadoes, however, this caused the map to become more bloated than it already is, so it has been commented out in the code.
 
-# Plotting Only Coastal Tornadoes
+# Bootstrap Sampling Assuming Perfect Conditions
 
-In this report, a 'coastal tornado' is defined as a tornado that falls inside the coordinates of the multipolygon coastal spatial data plotted. Some implications arise from this however that will be discussed later.
+Theoretically, assume the two most powerful tornadoes, EF4 and EF5, will become sharknados, given that they are coastal tornadoes, in other words: they form inside in the coastal data's spatial perimeter. 
 
-To first plot the coastal tornadoes, the tornadoes coordinate data points were joined with the coastal spatial data polygons. The tornado points were transformed into spatial data via st_transform() from the 'sf' package. Then with the st_join() from the same package, we can finally filter all the points inside the coastal regions like we want. Here, the observed proportion of EF4 and EF5 tornadoes on the coasts was also found and it will be shown in the results.
+## Joining Spatial Coastal Data and Regular Lat-Long Tornado Data
 
-Once a a dataframe with the coastal observations wanted is achieved, the process to plot them on a map is similar to before using ggplot().
+In this report, a 'coastal tornado' is defined as a tornado that falls inside the coordinates of the multipolygon coastal spatial data plotted. Some implications such as tornado points that fall on the borders will arise from this however. 
 
-# Bootstrap Sampling
+The tornadoes coordinate data points were joined with the coastal spatial data polygons. The tornado points were transformed into spatial data via st_transform() from the 'sf' package. Then with the st_join() from the same package, we can finally filter all the points inside the coastal regions like we want. Here, the observed proportion of EF4 and EF5 tornadoes on the coasts was also found and it will be shown in the results.
 
-This process was very complex. We assume that the null hypothesis states that each category of tornado: EF1, EF2,...,EF5, all appear equally. This gives us a p-value of 0.2 (There are 5 values and each appear evenly). Under this assumption, 1000 bootstrap samples were taken. At first, the points were filtered out to only include coastal tornadoes, but this process made the rendering unbearably long. Therefore, it was commented out, and we assume that the 473 observations sampled each time in 1 bootstrap sample are the coastal tornadoes. This is because if each data point is having their EF scale randomized with replacement, the points will not be of importance, rather the proportion of the amount of times an EF4 or EF5 tornado appears in a bootstrap sample is more important. A problem with this is there are no EF5 tornadoes in our data, but this is discussed as well later.
+## Bootstrap Histogram
 
-A histogram is made to show the distribution of the bootstrapped proportions, with a red dashed line showing the null p-value of 0.2. To see if our observed probability is based off random chance under the null,the mean of all the bootstrapped proportions is compared against the null p-value. If a p-value below 0.05 is recorded, we have enough evidence to reject the null and say EF4 and EF5 tornadoes are very unlikely to occur on the coasts of America.
+A histogram is made to show the distribution of the bootstrapped proportions, with a red dashed line showing the mean of these samples. Assuming an alpha level of 0.05. A long run proportion greater than 0.05 will be needed to state that, *assuming perfect conditions*, a sharknado will form. 
 
 
