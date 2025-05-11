@@ -121,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./final-intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Intro</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -139,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./final-conclusion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -159,26 +159,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./draft-data-doc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Draft: Data Documentation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./draft-results2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Draft: Results2</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./draft-intro-conclusions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Draft: Intro/Conclusions</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./draft-exec-summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Draft: Executive Summary</span></span></a>
+  <a href="./final-data-doc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Data Documentation</span></span></a>
   </div>
 </li>
       </ul>
@@ -189,7 +171,19 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link active" data-scroll-target="#executive-summary"><span class="header-section-number">2</span> Executive Summary</a>
+  <ul class="collapse">
+  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose"><span class="header-section-number">2.1</span> Purpose</a></li>
+  <li><a href="#evalutation" id="toc-evalutation" class="nav-link" data-scroll-target="#evalutation"><span class="header-section-number">2.2</span> Evalutation</a></li>
+  <li><a href="#findings" id="toc-findings" class="nav-link" data-scroll-target="#findings"><span class="header-section-number">2.3</span> Findings</a></li>
+  <li><a href="#reccomendations" id="toc-reccomendations" class="nav-link" data-scroll-target="#reccomendations"><span class="header-section-number">2.4</span> Reccomendations</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -213,13 +207,29 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The Sharknado film series takes the idea of tornadoes picking up marine life to a dramatic extreme. While there has not been a documented case of a tornado hurling sharks onto land, we explored whether such an event is even scientifically plausible. We examined whether powerful tornadoes could form over or near coastal shark-infested waters, lift sharks into the air, and carry them inland.</p>
-<p>To assess the likelihood of a tornado capturing sharks within its vortex and terrorizing the public, we analyzed tornado data from 2020 to 2024 and shark population data near U.S. coastlines, particularly around the Gulf of Mexico. We defined three key conditions that are required for a Sharknado to occur: (1) a tornado must be strong enough to lift a shark, (2) it must form over or near shark-inhabited waters, and (3) it must move inland.</p>
-<p>Our findings indicate that waterspouts, tornadoes that form over water, are generally weaker than their land-based counterparts and are unlikely to lift large animals such as sharks. On the other hand, stronger tornadoes typically do not form directly over water or in close proximity to shark habitats. The two types of tornadoes with the potential to lift sharks from the water are EF4 and EF5 tornadoes given the very specific conditions that sharks are near the surface of the water. Assuming that if tornadoes form relatively near the coasts of the United States and shark-inhabited waters, the observed probability of EF4 and EF5 tornadoes forming on the coast is 0.0021. When bootstrapping under the assumption that each scale of tornado has an equal chance of happening ( Null: p = 0.2 ), we get an observed bootstrap average of 0.008.</p>
+<section id="executive-summary" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Executive Summary</h1>
+<section id="purpose" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="purpose"><span class="header-section-number">2.1</span> Purpose</h2>
+<p>The Sharknado film series takes the idea of tornadoes picking up marine life to a dramatic extreme. While there has not been a documented case of a tornado hurling sharks onto land, we explored whether such an event is even scientifically plausible. We examined whether powerful tornadoes could form over or near coastal shark-infested waters enough for them to become sharknados.</p>
+</section>
+<section id="evalutation" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="evalutation"><span class="header-section-number">2.2</span> Evalutation</h2>
+<p>To assess the likelihood of a tornado capturing sharks within its vortex and terrorizing the public, we analyzed tornado data from 2020 to 2025 and shark data near U.S. coastlines, particularly around the Gulf of Mexico. We defined two key measurable conditions that are required for a Sharknado to occur: (1) a tornado must be strong enough to lift a shark and (2) it must form over or near shark-inhabited waters.</p>
+<p>Tornadoes, waterspouts, sharks, and shark incidents were plotted on a map and the coasts of the United States were highlighted to better illustrate them.</p>
+</section>
+<section id="findings" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="findings"><span class="header-section-number">2.3</span> Findings</h2>
+<p>Our findings indicate that waterspouts, tornadoes that form over water, are generally weaker than their land-based counterparts and are unlikely to lift large animals such as sharks. Tornadoes on the other hand, only two types of tornadoes have the potential to lift sharks from the water, these are EF4 and EF5 tornadoes. These tornadoes typically do not form directly over shark-infested waters or in close proximity to coasts of the Unites States. Even under theoretically perfect conditions, a proportion of 1000 bootstrapped samples based on the tornado data collected from 2020-2024 from NOAA, we get an observed bootstrap average of 0.0006 which is significantly smaller than our observed proportion of EF4 tornadoes: 0.0021.</p>
 <p><img src="bootstrap_histogram.png" class="img-fluid"></p>
-<p>Therefore, while the Sharknado scenario remains a thrilling fictional concept, the probability of such an event occurring any time soon in real life is extremely low.</p>
+</section>
+<section id="reccomendations" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="reccomendations"><span class="header-section-number">2.4</span> Reccomendations</h2>
+<p>The Sharknado scenario remains a thrilling fictional concept, luckily, the probability of such an event occurring any time soon in real life is extremely low. People can be rest assured. There is no immenent threat of tornadoes hurling sharks from skies.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -616,8 +626,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./final-intro.html" class="pagination-link" aria-label="<span class='chapter-number'>2</span>&nbsp; <span class='chapter-title'>Intro</span>">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Intro</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./final-intro.html" class="pagination-link" aria-label="<span class='chapter-number'>2</span>&nbsp; <span class='chapter-title'>Introduction</span>">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -3,7 +3,9 @@ title: "Methods"
 editor: visual
 ---
 
-# Load Neccessary Libraries
+# Methods
+
+## Load Neccessary Libraries
 
 Throughout the statistical , many R packages were used. There were three packages used to read in data, these being the readr and readxl packages which were used to read in common data formats such as .csv and .xlsx, while the sf package was used primarily for spatial data such as .shp and .kml files. The sf package was used to perform some data wrangling on spatial data as well. Other packages for data wrangling, cleaning, and manipulation were the dplyr, tidyverse, and stringr. The ggplot2 package was used to help make well designed charts and maps with accompanying titles, captions, and tags. With the use of ggplot(), the maps and mapdata packages were loaded in order to create maps of the United States, the West Coast, the Gulf of Mexico and East Coast, as well as Hawaii. Lastly, the knitr and patchwork packages were utilized to create better looking tables and charts in the quarto document. 
 
@@ -22,11 +24,11 @@ library(knitr)
 library(patchwork)
 ```
 
-# Shark Data
+## Shark Data
 
 Four shark datasets were used in this business report. Three come from trusted government agencies and report a survey of sharks tagged in the Gulf of Mexico, Florida, and Hawaii. The fourth one differs from the rest, being that it is data recorded on shark incidents in California.
 
-## Cleaning Shark Data
+### Cleaning Shark Data
 
 Not much data wrangling was needed to prepare for shark distribution plotting. However, in California's shark incident dataset, empty longitude and latitude were removed. 
 
@@ -132,7 +134,7 @@ kable(shark_table_hawaii,
 
 ```
 
-# Tornado Data
+## Tornado Data
 
 Five datasets from the past 5 years as of 2025, each containing information for a different year, were analyzed in this report. All datasets were taken from the same source, National Oceanic and Atmospheric Association (NOAA).
 
@@ -148,7 +150,7 @@ tornado_2020_2024_dataframe <- bind_rows(
   read_csv("Datasets/Tornado_Datasets/StormEvents_details-ftp_v1.0_d2020_c20240620.csv"))
 ```
 
-## Cleaning Tornado Data
+### Cleaning Tornado Data
 
 The storm events included in this dataset ranged from avalanches to thunderstorms. Due to interest only being in the events: Tornadoes and Waterspouts, all other unneccessary events were filtered out and removed from the data. These two events were then categorized in their own dataset. 
 
@@ -180,11 +182,11 @@ tornado_only_2020_2024_clean_dataframe <- tornado_2020_2024_dataframe %>%
   filter(TOR_F_SCALE %in% c('EF1', 'EF2', 'EF3', 'EF4', 'EF5'))
 ```
 
-# Coastal Data 
+## Coastal Data 
 
 Coastal data for the United States was taken from the United States Geological Survey (USGS). This data set included data plotting the borders of U.S. coasts as well as U.S. territories, the latter was rejected for this report. 
 
-## Preparing Coastal Data for Plotting Maps
+### Preparing Coastal Data for Plotting Maps
 
 In order to overlay what parts our coastal data define the coasts in the United States, a plot consisting of both coordinate and spatial data was made.
 
@@ -230,31 +232,31 @@ ggplot(world) +
 
 ```
 
-# Comparing Waterspouts to Tornadoes
+## Comparing Waterspouts to Tornadoes
 
 Tornadoes and waterspouts are classified as two different events. Both fit one of the requirements for a sharknado: The event must form over *or* near shark-inhabited waters. However, there is no simple, concrete way to measure the power scale of waterspouts. Therefore, an oversimplified way to check how much damage they are capable of is to look at the average cost of property each event has caused in our sample. 
 
 The following data wrangling was needed in order to get a clean chart comparing the averages. The data's property damage column was formatted as 100K or 1M, meaning $100,000 and $1,000,000. To combat this, rows with the letters K or M in the "DAMAGE_PROPERTY" column were multiplied by 1000 and 10000000. This prepared the property damage to be averaged out and listed in a chart using ggplot() from the ggplot2 packge. 
 
-# Plotting Waterspouts
+## Plotting Waterspouts
 
 When plotting waterspouts, only the tornadic waterspouts were considered, as these are more related to tornadoes and cause a much bigger disruption than fair weather waterspouts. In ggplot(), geom_segment() was used to plot the beginning and end points of waterspouts, to see if they'd move inland. Although some do, most do not move a noticeable distance away from there beginning coordinates, and if they do, they do not make landfall.
 
-# Plotting Tornadoes
+## Plotting Tornadoes
 
 When plotting tornadoes, it is a very similar process to plotting waterspouts. In this situation, we only want tornadoes as our EVENT_TYPE. In the beginning, using geom_segment() was considered when plotting tornadoes, however, this caused the map to become more bloated than it already is, so it has been commented out in the code.
 
-# Bootstrap Sampling Assuming Perfect Conditions
+## Bootstrap Sampling Assuming Perfect Conditions
 
 Theoretically, assume the two most powerful tornadoes, EF4 and EF5, will become sharknados, given that they are coastal tornadoes, in other words: they form inside in the coastal data's spatial perimeter. 
 
-## Joining Spatial Coastal Data and Regular Lat-Long Tornado Data
+### Joining Spatial Coastal Data and Regular Lat-Long Tornado Data
 
 In this report, a 'coastal tornado' is defined as a tornado that falls inside the coordinates of the multipolygon coastal spatial data plotted. Some implications such as tornado points that fall on the borders will arise from this however. 
 
 The tornadoes coordinate data points were joined with the coastal spatial data polygons. The tornado points were transformed into spatial data via st_transform() from the 'sf' package. Then with the st_join() from the same package, we can finally filter all the points inside the coastal regions like we want. Here, the observed proportion of EF4 and EF5 tornadoes on the coasts was also found and it will be shown in the results.
 
-## Bootstrap Histogram
+### Bootstrap Histogram
 
 A histogram is made to show the distribution of the bootstrapped proportions, with a red dashed line showing the mean of these samples. Assuming an alpha level of 0.05. A long run proportion greater than 0.05 will be needed to state that, *assuming perfect conditions*, a sharknado will form. 
 
